@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Author Search</title>
+</head>
+<body>
+
+<h2>Author Search</h2>
+
+<ul>
+    <li th:each="author : ${authors}">
+        <a th:href="@{/authors/{id}(id=${author.authorId})}"
+           th:text="${author.authorName}">
+        </a>
+    </li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Books</title>
+</head>
+<body>
+
+<h2>Search Results</h2>
+
+<form>
+    <table border="1" width="100%">
+        <tr>
+            <th>Compare</th>
+            <th>Book Title</th>
+            <th>Publisher</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Image</th>
+        </tr>
+
+        <tr th:each="book : ${books}">
+            <td><input type="checkbox" name="compare" /></td>
+
+            <td>
+                <a th:href="@{/book-details/{id}(id=${book.bookId})}"
+                   th:text="${book.title}">
+                </a>
+            </td>
+
+            <td th:text="${book.publisher.publisherName}"></td>
+            <td th:text="${book.category.categoryName}"></td>
+            <td th:text="${book.author.authorName}"></td>
+
+            <td>
+                <img th:src="${book.imageUrl}"
+                     width="80" height="100"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

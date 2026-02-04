@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Author Summary</title>
+</head>
+<body>
+
+<h2 th:text="${author.authorName}"></h2>
+
+<div th:each="cat : ${categories}">
+    <strong th:text="${cat.categoryName}"></strong>
+    (<span th:text="${cat.bookCount}"></span> book(s))
+    <a th:href="@{/books(authorId=${author.authorId},categoryId=${cat.categoryId})}">
+        View
+    </a>
+    <br><br>
+</div>
+
+</body>
+</html>
