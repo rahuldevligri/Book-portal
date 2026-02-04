@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Info</title>
+</head>
+
+<body>
+
+<div style="width:90%;margin:30px auto;">
+
+    <h2>Login Information</h2>
+    <hr>
+
+    <table cellpadding="6">
+        <tr>
+            <td><b>First Name :</b></td>
+            <td th:text="${user.fullName}">First Name</td>
+        </tr>
+        <tr>
+            <td><b>E-mail :</b></td>
+            <td th:text="${user.email}">Email</td>
+        </tr>
+        <tr>
+            <td><b>User Name :</b></td>
+            <td th:text="${user.username}">Username</td>
+        </tr>
+        <tr>
+            <td><b>Password :</b></td>
+            <td>********</td>
+        </tr>
+        <tr>
+            <td><b>Secret Question :</b></td>
+            <td th:text="${user.secretQuestion}">Question</td>
+        </tr>
+        <tr>
+            <td><b>Secret Answer :</b></td>
+            <td th:text="${user.secretAnswer}">Answer</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <a href="/">Back to Login</a>
+
+</div>
+
+</body>
+</html>

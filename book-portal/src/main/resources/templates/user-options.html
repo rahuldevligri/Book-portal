@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Options</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+</head>
+
+<body topmargin="0" leftmargin="0">
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <!-- TEXT LOGO (NO IMAGE) -->
+        <td width="40%">
+            <b style="font-size:20px;">Book Portal</b><br>
+            <span style="font-size:12px;color:#555;">Technologies</span>
+        </td>
+
+        <!-- USER INFO -->
+        <td width="30%">
+            <b>
+                Welcome
+                <span th:text="${#strings.toUpperCase(username)}">USER</span>!
+            </b>
+            <br>
+            <font style="font-size:11px" color="#000000" face="verdana, helvetica"
+                  th:text="${today}">
+                October 28, 2006
+            </font>
+        </td>
+
+        <!-- LOGOUT / OPTIONS -->
+        <td width="30%" align="right">
+
+            <!-- LOGOUT -->
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+                <button type="submit"
+                        style="background:none;border:none;cursor:pointer;">
+                    » Logout
+                </button>
+            </form>
+
+            &nbsp;&nbsp;&nbsp;
+            » <a th:href="@{/user-options}">User Options</a>&nbsp;&nbsp;&nbsp;
+        </td>
+    </tr>
+
+    <!-- TOP MENU -->
+    <tr>
+        <td colspan="3" align="center">
+            <p class="menutd">
+                » <a th:href="@{/authorsearch}" class="menutdlinks">Author Search</a>
+                &nbsp;&nbsp;&nbsp;
+                » <a th:href="@{/publishersearch}" class="menutdlinks">Publisher Search</a>
+                &nbsp;&nbsp;&nbsp;
+                » <a th:href="@{/categorysearch}" class="menutdlinks">Category Search</a>
+            </p>
+        </td>
+    </tr>
+</table>
+
+<br>
+
+<!-- MAIN CONTENT -->
+<table width="100%" bgcolor="#0098CA" height="95%" border="0"
+       style="border:3px solid #006080">
+    <tr>
+
+        <!-- LEFT PANEL -->
+        <td valign="top" width="25%">
+            <font color="White"><b>User Options:</b></font>
+            <br><br>
+
+            <center>
+                » <a th:href="@{/change-password}">Change Password</a>
+            </center>
+
+            <br>
+
+            <center>
+                » <a th:href="@{/edit-profile}">Edit Profile</a>
+            </center>
+        </td>
+
+        <!-- RIGHT PANEL -->
+        <td width="75%">
+            <table cellpadding="3" cellspacing="0" width="100%"
+                   bgcolor="#BDDFFF" height="95%">
+                <tr>
+                    <td align="center" valign="top">
+                        <br>
+                        In this page you have some options for handling your account.<br>
+                        Please select an option from the left panel.<br>&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+
+    </tr>
+</table>
+
+<br>
+
+<!-- FOOTER -->
+<div align="center">
+    <font size="-1">©2006 Book Portal</font>
+</div>
+
+<div align="center">
+    <a href="#">Subscription Services</a> |
+    <a href="#">About Us</a> |
+    <a href="#">Contact Us</a> |
+    <a href="#">Privacy Policy</a> |
+    <a th:href="@{/admin}">Admin</a>
+</div>
+
+</body>
+</html>

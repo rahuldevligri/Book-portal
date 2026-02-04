@@ -1,39 +1,104 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Edit Profile</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
 </head>
 
 <body>
 
-<h2>Edit Profile</h2>
+<table width="100%">
+    <tr>
+        <td align="center">
 
-<form th:action="@{/edit-profile}"
-      th:object="${userForm}"
-      method="post">
+            <table width="60%" bgcolor="#BDDFFF"
+                   style="border:3px solid #006080;margin-top:40px;"
+                   cellpadding="8">
 
-    <div>
-        <label>Username</label>
-        <!-- username usually not editable -->
-        <input type="text" th:field="*{username}" readonly>
-    </div>
+                <tr bgcolor="#0098CA">
+                    <td colspan="2" align="center">
+                        <b style="color:white;">Edit Profile</b>
+                    </td>
+                </tr>
 
-    <div>
-        <label>Full Name</label>
-        <input type="text" th:field="*{fullName}" required>
-    </div>
+                <!-- SUCCESS -->
+                <tr th:if="${success}">
+                    <td colspan="2" align="center" style="color:green;">
+                        <b th:text="${success}"></b>
+                    </td>
+                </tr>
 
-    <div>
-        <label>Email</label>
-        <input type="email" th:field="*{email}" required>
-    </div>
+                <tr>
+                    <td colspan="2">
 
-    <button type="submit">Update Profile</button>
+                        <form th:action="@{/edit-profile}"
+                              method="post"
+                              th:object="${editProfileForm}">
 
-</form>
+                            <!-- CSRF -->
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
 
-<a href="/dashboard">Back to Dashboard</a>
+                            <table width="100%" cellpadding="6">
+
+                                <tr>
+                                    <td align="right"><b>First Name:</b></td>
+                                    <td><input type="text" th:field="*{firstName}" required></td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b>Last Name:</b></td>
+                                    <td><input type="text" th:field="*{lastName}" required></td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b>E-Mail Address:</b></td>
+                                    <td><input type="email" th:field="*{email}" required></td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b>User Name:</b></td>
+                                    <td><input type="text" th:field="*{username}" readonly></td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b>Secret Question:</b></td>
+                                    <td>
+                                        <select th:field="*{secretQuestion}">
+                                            <option value="what is your pet name">What is your pet name?</option>
+                                            <option value="your favorite book">Your favorite book?</option>
+                                            <option value="your birth city">Your birth city?</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b>Secret Answer:</b></td>
+                                    <td><input type="text" th:field="*{secretAnswer}" required></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <br>
+                                        <button type="submit">Save Profile</button>
+                                        &nbsp;&nbsp;
+                                        <a th:href="@{/user-options}">Cancel</a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
 
 </body>
 </html>

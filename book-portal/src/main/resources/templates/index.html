@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Book Portal | Home</title>
@@ -61,12 +61,28 @@
 
 <div class="box">
 
+    <!-- ✅ SUCCESS MESSAGE (after registration) -->
+    <div th:if="${success}" style="color:green; margin-bottom:10px;">
+        <p th:text="${success}"></p>
+    </div>
+
+    <!-- ✅ PASSWORD CHANGED MESSAGE -->
+    <div th:if="${param.passwordChanged}" style="color:green; margin-bottom:10px;">
+        Password changed successfully. Please login again.
+    </div>
+
+    <!-- ❌ LOGIN ERROR MESSAGE -->
     <div th:if="${param.error}" style="color:red; margin-bottom:10px;">
         Invalid username or password
     </div>
 
-    <!-- IMPORTANT: This form POSTS to /login -->
+    <!-- LOGIN FORM -->
     <form th:action="@{/login}" method="post">
+
+        <!-- ✅ CSRF TOKEN (MANDATORY) -->
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
 
         <div class="row">
             <label>Customer Login:</label>
@@ -79,7 +95,7 @@
         </div>
 
         <div class="checkbox-row">
-            <input type="checkbox" disabled> Remember Me
+            <input type="checkbox" name="remember-me"> Remember Me
         </div>
 
         <div class="buttons">

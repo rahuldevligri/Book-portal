@@ -1,6 +1,7 @@
 package com.example.bookportal.service;
 
 import com.example.bookportal.dto.ChangePasswordForm;
+import com.example.bookportal.dto.EditProfileForm;
 import com.example.bookportal.dto.RegisterForm;
 import com.example.bookportal.entity.User;
 import com.example.bookportal.repository.UserRepository;
@@ -19,6 +20,8 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // ================= EXISTING LOGIC (UNCHANGED) =================
+
     public void register(RegisterForm form) {
 
         if (!form.getPassword().equals(form.getConfirmPassword())) {
@@ -30,6 +33,8 @@ public class UserService {
         user.setEmail(form.getEmail());
         user.setFullName(form.getFirstName() + " " + form.getLastName());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setSecretAnswer(form.getSecretAnswer());
+        user.setSecretQuestion(form.getSecretQuestion());
 
         userRepository.save(user);
     }
@@ -42,5 +47,25 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(form.getNewPassword()));
         userRepository.save(user);
     }
-}
 
+    // ================= NEW METHODS (ADDED ONLY) =================
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found: " + username));
+    }
+
+    public void updateProfileFromForm(EditProfileForm form) {
+
+        User user = userRepository.findByUsername(form.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setEmail(form.getEmail());
+        user.setFullName(form.getFirstName() + " " + form.getLastName());
+        user.setSecretQuestion(form.getSecretQuestion());
+        user.setSecretAnswer(form.getSecretAnswer());
+
+        userRepository.save(user);
+    }
+}

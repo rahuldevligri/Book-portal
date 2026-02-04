@@ -1,19 +1,163 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mostafa Maged</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+    <script type="text/javascript">
+        function search() {
+            var selectedOption = document.jump.menu.value;
+            if (selectedOption === "Author") {
+                location.href = "/authorsearch";
+            } else if (selectedOption === "Publisher") {
+                location.href = "/publishersearch";
+            } else if (selectedOption === "Title") {
+                location.href = "/titlesearch";
+            }
+        }
+    </script>
+
+    <!-- EXTRA SPACING -->
+    <style>
+        .header-space {
+            margin-bottom: 30px;
+        }
+
+        .content-space {
+            margin-top: 30px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #106194;
+        }
+    </style>
 </head>
-<body>
-    <h2>Dashboard</h2>
-    <p th:text="${#authentication.name}"></p>
 
-    <a href="/change-password">Change Password</a>
+<body topmargin="0" leftmargin="0">
 
-    <form th:action="@{/logout}" method="post">
-        <button>Logout</button>
+<!-- ================= HEADER ================= -->
+<table border="0" cellpadding="10" cellspacing="0" width="100%" class="header-space">
+    <tr>
+        <td width="40%" class="logo-text">
+            Mostafa Maged Technologies
+        </td>
+
+        <td width="30%">
+            <b>
+                Welcome <span th:text="${#strings.toUpperCase(username)}">MOSTAFA MAGED</span>!
+            </b>
+            <span style="font-size:15px"
+                  th:text="${today}">October 28, 2006</span>
+        </td>
+
+        <td width="30%" align="right">
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}" />
+                <button type="submit"
+                        style="background:none;border:none;cursor:pointer;">
+                    » Logout
+                </button>
+            </form>
+            &nbsp;&nbsp;
+            » <a href="/user-options">User Options</a>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="3" align="center">
+            » <a href="/authorsearch">Author Search</a>
+            &nbsp;&nbsp;&nbsp;
+            » <a href="/publishersearch">Publisher Search</a>
+            &nbsp;&nbsp;&nbsp;
+            » <a href="/categorysearch">Category Search</a>
+        </td>
+    </tr>
+</table>
+
+<!-- ================= SEARCH BAR ================= -->
+<form name="jump" style="margin:0;padding:0">
+    <div align="center" class="content-space">
+        <table style="border:1px solid #006080" width="100%" height="40">
+            <tr>
+                <td bgcolor="#0098CA" align="center">
+                    <b style="color:#BDDFFF">FIND</b>
+                    <input size="60%" name="query">
+                    <select name="menu">
+                        <option value="Author">Author</option>
+                        <option value="Publisher">Publisher</option>
+                        <option value="Title">Title</option>
+                    </select>
+
+                    <a href="javascript:search();"
+                       style="font-weight:bold;color:white;margin-left:10px;">
+                        SEARCH
+                    </a>
+
+                    <a href="/advancedsearch"
+                       style="font-weight:bold;color:white;margin-left:10px;">
+                        Advanced
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
 </form>
 
+<!-- ================= CONTENT ================= -->
+<div align="center" class="content-space">
+    <b>Search over 10,000 titles from over 15 Publishers</b>
+</div>
+
+<div align="center" class="content-space">
+    <table width="92%" cellpadding="6" cellspacing="3">
+        <tr bgcolor="#EEF5F8">
+            <td colspan="2">
+                <b>BOOK MANAGER</b><br>
+                Search books by Author, Publisher, or Category
+            </td>
+        </tr>
+
+        <tr bgcolor="#E4EFF5">
+            <td width="50%">
+                <b>Author SEARCH</b><br>
+                Search by author name.
+            </td>
+            <td width="50%">
+                <b>Publisher SEARCH</b><br>
+                Search by publisher.
+            </td>
+        </tr>
+
+        <tr bgcolor="#EEF5F8">
+            <td width="50%">
+                <b>Category SEARCH</b><br>
+                Browse by category.
+            </td>
+            <td width="50%">
+                <b>CUSTOMER SUPPORT</b><br>
+                Assistance for all questions and inputs.
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div align="center" class="content-space">
+    ©2006 Mostafa Maged<br><br>
+    <a href="#">Subscription Services</a> |
+    <a href="#">About Us</a> |
+    <a href="#">Contact Us</a> |
+    <a href="#">Privacy Policy</a> |
+    <a href="/admin">Admin</a>
+</div>
 
 </body>
 </html>

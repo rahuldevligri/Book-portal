@@ -23,6 +23,25 @@ public class User {
 
     private boolean enabled = true;
 
+    public String getSecretQuestion() {
+        return secretQuestion;
+    }
+
+    public void setSecretQuestion(String secretQuestion) {
+        this.secretQuestion = secretQuestion;
+    }
+
+    public String getSecretAnswer() {
+        return secretAnswer;
+    }
+
+    public void setSecretAnswer(String secretAnswer) {
+        this.secretAnswer = secretAnswer;
+    }
+
+    private String secretQuestion;
+    private String secretAnswer;
+
     public Long getId() {
         return id;
     }

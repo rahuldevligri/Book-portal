@@ -5,7 +5,8 @@ import com.example.bookportal.entity.User;
 import com.example.bookportal.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ForgotController {
@@ -16,14 +17,13 @@ public class ForgotController {
         this.userRepository = userRepository;
     }
 
-    // Step 1: Show forgot page
+    // STEP 1: Show Forgot Page
     @GetMapping("/forgot")
     public String forgotPage(Model model) {
         model.addAttribute("forgotForm", new ForgotForm());
-        return "forgot";
+        return "forgot";   // old forgot.html
     }
 
-    // Step 2: Process forgot logic
     @PostMapping("/forgot")
     public String processForgot(ForgotForm form, Model model) {
 
@@ -34,7 +34,10 @@ public class ForgotController {
             return "forgot";
         }
 
-        model.addAttribute("username", user.getUsername());
-        return "forgot-result";
+        // IMPORTANT: send full user
+        model.addAttribute("user", user);
+
+        // old-style login info page
+        return "login-info";
     }
 }

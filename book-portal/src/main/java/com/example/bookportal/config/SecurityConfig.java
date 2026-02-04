@@ -27,10 +27,17 @@ public class SecurityConfig {
                 )
 
                 .formLogin(form -> form
+                        .loginPage("/")
                         .loginProcessingUrl("/login")     // POST only
-                        .failureUrl("/?error")
+                        .failureUrl("/?error=true")       // on failure
                         .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
+                )
+
+                .rememberMe(remember -> remember
+                        .key("book-portal-remember-me")
+                        .rememberMeParameter("remember-me")
+                        .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 days
                 )
 
                 .logout(logout -> logout
