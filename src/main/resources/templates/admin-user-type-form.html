@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="${mode} == 'edit' ? #{edit.user.type} : #{add.user.type}">User Type</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+<div class="edit-shell">
+    <th:block th:replace="~{fragments/admin-form-shell :: messages}"></th:block>
+    <th:block th:replace="~{fragments/admin-form-shell :: title(${mode} == 'edit' ? #{edit.user.type} : #{add.user.type})}"></th:block>
+    <form method="post" th:object="${userTypeDTO}" th:action="${mode} == 'edit' ? @{'/admin/user-types/edit/' + ${userTypeDTO.id}} : @{/admin/user-types/add}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:if="${userTypeDTO.id}" th:field="*{id}" />
+
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{name}">Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{type}" />
+                <div th:if="${#fields.hasErrors('type')}" class="message-error inl-5e0faad207" th:errors="*{type}"></div>
+            </div>
+        </div>
+        <th:block th:replace="~{fragments/admin-form-shell :: save-actions}"></th:block>
+    </form>
+</div>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

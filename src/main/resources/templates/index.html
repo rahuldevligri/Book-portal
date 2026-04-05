@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'" th:classappend="${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{welcome}">Book Portal | Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" href="/style.css">
+    
+</head>
+
+
+<body class="auth-centered-page" th:classappend="${#locale.language}=='ar'?' rtl':' ltr'">
+    <div class="welcome-container inl-93f1f3eda4" th:classappend="${#locale.language}=='ar'?'rtl':''">
+        <div class="welcome-title inl-87fbca988e" th:text="#{welcome}" th:classappend="${#locale.language}=='ar'?'center-ar-ar':''">Welcome to Book Portal</div>
+        <div class="welcome-desc inl-4ff3801f7e" th:classappend="${#locale.language}=='ar'?'center-ar-ar':''">
+            <span th:text="#{welcome.desc}">Your one-stop portal to browse books by title and category, see related authors/publishers, and manage your library access.</span><br>
+            <span th:text="#{welcome.loginregister}">Please login or register to continue.</span>
+        </div>
+        <div class="inl-74b8dfe77a">
+            <form method="get" id="langChangeForm" class="inl-25b5288699">
+                <select name="lang" onchange="document.getElementById('langChangeForm').submit()" class="inl-f261655b5c">
+                    <option th:value="en" th:selected="${#locale.language == 'en'}">English</option>
+                    <option th:value="ar" th:selected="${#locale.language == 'ar'}">عربي</option>
+                    <option th:value="fr" th:selected="${#locale.language == 'fr'}">Français</option>
+                    <option th:value="es" th:selected="${#locale.language == 'es'}">Español</option>
+                </select>
+            </form>
+        </div>
+        <div th:if="${param.registered}" class="inl-a964770a6e">
+            <p th:text="#{register.success}">Registration successful! Please login.</p>
+        </div>
+        <div th:if="${param.passwordChanged}" class="inl-a964770a6e">
+            <p th:text="#{password.changed}">Password changed successfully.</p>
+        </div>
+        <div th:if="${param.resetSuccess}" class="inl-a964770a6e">
+            <p th:text="#{reset.success}">Password reset successfully. Please login.</p>
+        </div>
+        <div th:if="${param.error} or ${error}" class="inl-00474f1f52 center-ar-ar">
+            <span th:text="#{login.invalid}">Invalid username or password</span>
+        </div>
+        <form th:action="@{/login}" method="post" class="inl-ef0b7a1148" th:classappend="${#locale.language}=='ar'?'rtl':''" th:object="${loginForm}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div th:classappend="${#locale.language}=='ar'?'rtl':''" class="inl-ed0e4a7f52">
+                <label th:text="#{username}" class="inl-39e200034f">Username:</label><br>
+                <input type="text" th:field="*{username}" class="inl-9ec2f25594">
+                <div th:if="${#fields.hasErrors('username')}" class="message-error inl-cfe92f3ae5" th:errors="*{username}"></div>
+            </div>
+            <div th:classappend="${#locale.language}=='ar'?'rtl':''" class="inl-ed0e4a7f52">
+                <label th:text="#{password}" class="inl-39e200034f">Password:</label><br>
+                <input type="password" th:field="*{password}" class="inl-9ec2f25594">
+                <div th:if="${#fields.hasErrors('password')}" class="message-error inl-cfe92f3ae5" th:errors="*{password}"></div>
+            </div>
+            <div th:classappend="${#locale.language}=='ar'?'rtl remember-ar':''" class="inl-1b4e90965f">
+                <input type="checkbox" name="remember-me"> <span th:text="#{remember.me}">Remember Me</span>
+            </div>
+            <div class="inl-23f8c75fb0">
+                <button type="submit" th:text="#{login}" class="inl-02f8879a91">Login</button>
+                <a th:href="@{/register}" th:text="#{register}" class="inl-5287aae040">Register</a>
+                <a href="/forgot" th:text="#{forgot.password}" class="inl-6fa35d23a4">Forgot Password?</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+

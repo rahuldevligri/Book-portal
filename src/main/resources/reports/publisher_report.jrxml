@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="publisher_report"
+              language="java"
+              pageWidth="842"
+              pageHeight="595"
+              orientation="Landscape"
+              columnWidth="802"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="de4ec287-604b-46e2-aa7f-385bada24f5f">
+
+    <style name="Title" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="50" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+    <style name="SubTitle" forecolor="#666666" fontName="DejaVu Sans" fontSize="18" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+    <style name="Column header" forecolor="#666666" fontName="DejaVu Sans" fontSize="14" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+    <style name="Detail" mode="Transparent" fontName="DejaVu Sans" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+
+    <subDataset name="PieChartDataset" uuid="47e01916-67b1-4c63-9ee1-a3ecb81fc4ee"/>
+
+    <parameter name="p_publisher_id" class="java.lang.Long"/>
+    <parameter name="p_background_image" class="java.lang.String"/>
+    <parameter name="p_report_title" class="java.lang.String"/>
+    <parameter name="p_report_subtitle" class="java.lang.String"/>
+    <parameter name="p_label_distributor_id" class="java.lang.String"/>
+    <parameter name="p_label_distributor_name" class="java.lang.String"/>
+    <parameter name="p_label_telephone" class="java.lang.String"/>
+    <parameter name="p_label_email" class="java.lang.String"/>
+    <parameter name="p_label_book_id" class="java.lang.String"/>
+    <parameter name="p_label_book_title" class="java.lang.String"/>
+    <parameter name="p_label_page" class="java.lang.String"/>
+    <parameter name="p_label_of" class="java.lang.String"/>
+    <parameter name="p_is_rtl" class="java.lang.Boolean"/>
+
+    <queryString>
+        <![CDATA[SELECT
+     pd.ID AS publisher_distributor_id,
+     pd.NAME AS publisher_distributor_name,
+     pd.TELEPHONE AS publisher_distributor_telephone,
+     pd.EMAIL AS publisher_distributor_email,
+     b.ID AS book_id,
+     b.TITLE AS book_title
+FROM
+     publisher_distributor pd
+     INNER JOIN book_publisher bp ON pd.ID = bp.PUBLISHER_ID
+     INNER JOIN book b ON bp.BOOK_ID = b.ID
+WHERE
+     pd.ID = $P{p_publisher_id} OR $P{p_publisher_id} IS NULL
+ORDER BY pd.ID]]>
+    </queryString>
+
+    <field name="publisher_distributor_id" class="java.lang.Long"/>
+    <field name="publisher_distributor_name" class="java.lang.String"/>
+    <field name="publisher_distributor_telephone" class="java.lang.String"/>
+    <field name="publisher_distributor_email" class="java.lang.String"/>
+    <field name="book_id" class="java.lang.Long"/>
+    <field name="book_title" class="java.lang.String"/>
+
+    <group name="publisher_distributor_ID">
+        <groupExpression><![CDATA[$F{publisher_distributor_id}]]></groupExpression>
+
+        <groupHeader>
+            <band height="96">
+                <frame>
+                    <reportElement mode="Opaque" x="213" y="58" width="589" height="5" backcolor="#00FFFF" uuid="9cb2159d-aec6-43dc-97ca-d228f31a7f41">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                </frame>
+                <frame>
+                    <reportElement mode="Opaque" x="20" y="58" width="589" height="5" backcolor="#00FFFF" uuid="89a6c3a7-22af-46ca-99b3-3e0bb7185fd3">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                </frame>
+
+                <!-- LTR top blocks -->
+                <textField>
+                    <reportElement style="Column header" x="213" y="8" width="100" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="8a23456f-c9c6-4d44-a1d0-97ed8b362bde">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_distributor_id}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="318" y="8" width="128" height="14" forecolor="#000000" uuid="2d8a6ecf-0f25-41f2-8fdf-a9244ec82b05">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_id}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="213" y="30" width="100" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="9189fbff-618e-4a10-9f1f-c0536f0f752d">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_telephone}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="318" y="30" width="128" height="14" forecolor="#000000" uuid="f64f647f-665d-4208-9328-5e4628d4f981">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_telephone}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="478" y="8" width="124" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="f7794b5e-bdd8-4db9-b45d-af92ce614d99">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_distributor_name}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="604" y="8" width="198" height="14" forecolor="#000000" uuid="ec9df3d6-bd4b-4c66-9766-7beea73f7494">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_name}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="478" y="30" width="124" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="fb9f5d6f-c1f1-40c1-a7df-7bf580f2b80f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_email}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="604" y="30" width="198" height="14" forecolor="#000000" uuid="31f69f75-a8d1-4a19-8dcf-d1884bbfbb4f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box leftPadding="3"/>
+                    <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_email}]]></textFieldExpression>
+                </textField>
+
+                <!-- RTL top blocks -->
+                <textField>
+                    <reportElement style="Column header" x="150" y="8" width="100" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="62f375e3-60f0-4bca-a4c7-0ec1f6ba5f57">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_distributor_id}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="20" y="8" width="130" height="14" forecolor="#000000" uuid="6558d8f6-6dfd-47a0-9824-5fe3ea3f53b2">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_id}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="150" y="30" width="100" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="bf2d2405-0f4b-405f-8682-9ea6b72c80f2">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_telephone}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="20" y="30" width="130" height="14" forecolor="#000000" uuid="8d0f26de-7887-4551-b68f-39b9e2205fef">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_telephone}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="440" y="8" width="120" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="6d139e1e-f965-4912-8f74-8f9f344bd19a">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="10" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_distributor_name}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="255" y="8" width="180" height="14" forecolor="#000000" uuid="2916cd61-a4be-4d84-8e2b-475b74124d5f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_name}]]></textFieldExpression>
+                </textField>
+
+                <textField>
+                    <reportElement style="Column header" x="440" y="30" width="120" height="14" mode="Opaque" backcolor="#70A9C6" forecolor="#FFFFFF" uuid="4ebdf8d9-420e-4633-a36b-2af52fb6fa82">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_email}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="255" y="30" width="180" height="14" forecolor="#000000" uuid="60a8ca96-8d5b-4f46-acf7-1ce3c91f4ce8">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box rightPadding="3"/>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$F{publisher_distributor_email}]]></textFieldExpression>
+                </textField>
+
+                <!-- Table header LTR -->
+                <textField>
+                    <reportElement style="Column header" mode="Opaque" x="213" y="66" width="235" height="14" forecolor="#000000" backcolor="#99FF99" uuid="727ac8a6-e6f4-47b4-9e89-8801c8f0b89f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                    <textElement textAlignment="Center"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_book_id}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" mode="Opaque" x="448" y="66" width="354" height="14" forecolor="#000000" backcolor="#99FF99" uuid="c4ecdc4c-70e8-4c78-b145-6fae0e6389d5">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                    <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_book_title}]]></textFieldExpression>
+                </textField>
+
+                <!-- Table header RTL -->
+                <textField>
+                    <reportElement style="Column header" mode="Opaque" x="20" y="66" width="354" height="14" forecolor="#000000" backcolor="#99FF99" uuid="bd7fa442-a63b-47de-b488-d2fce9dcbca5">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                    <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_book_title}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" mode="Opaque" x="374" y="66" width="235" height="14" forecolor="#000000" backcolor="#99FF99" uuid="1b5be22e-d41c-4df3-a2f8-4f13f37bdb6e">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                    <textElement textAlignment="Center"><font fontName="DejaVu Sans" size="12" isBold="true" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_label_book_id}]]></textFieldExpression>
+                </textField>
+            </band>
+        </groupHeader>
+
+        <groupFooter>
+            <band height="14">
+                <line>
+                    <reportElement x="213" y="10" width="589" height="1" uuid="79f84f56-4ebf-4b31-b3f1-eed836a2893f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <graphicElement><pen lineWidth="0.5" lineColor="#00DCE0"/></graphicElement>
+                </line>
+                <line>
+                    <reportElement x="20" y="10" width="589" height="1" uuid="f4a0fc7e-03be-4f7f-9789-c7e86f81c2d6">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <graphicElement><pen lineWidth="0.5" lineColor="#00DCE0"/></graphicElement>
+                </line>
+            </band>
+        </groupFooter>
+    </group>
+
+    <background>
+        <band height="555">
+            <!-- LTR flower left -->
+            <image>
+                <reportElement x="-20" y="65" width="229" height="250" uuid="82164238-2fd1-4183-ae49-1ac8f5ce156d">
+                    <printWhenExpression><![CDATA[($P{p_is_rtl} == null || !$P{p_is_rtl}) && $V{PAGE_NUMBER} == 1]]></printWhenExpression>
+                </reportElement>
+                <imageExpression><![CDATA[$P{p_background_image}]]></imageExpression>
+            </image>
+            <image>
+                <reportElement x="-20" y="-20" width="229" height="250" uuid="4bd703cd-60bc-418c-b07e-7ad2f603b0ce">
+                    <printWhenExpression><![CDATA[($P{p_is_rtl} == null || !$P{p_is_rtl}) && $V{PAGE_NUMBER} > 1]]></printWhenExpression>
+                </reportElement>
+                <imageExpression><![CDATA[$P{p_background_image}]]></imageExpression>
+            </image>
+
+            <!-- RTL flower right (same size) -->
+            <image>
+                <reportElement x="620" y="90" width="229" height="250" uuid="a1f98412-5f11-4c20-aa4d-6f0632b6bfe1">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl} && $V{PAGE_NUMBER} == 1]]></printWhenExpression>
+                </reportElement>
+                <imageExpression><![CDATA[$P{p_background_image}]]></imageExpression>
+            </image>
+            <image>
+                <reportElement x="620" y="5" width="229" height="250" uuid="ac48b359-0f6d-4a81-a504-5cd0adf1f67f">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl} && $V{PAGE_NUMBER} > 1]]></printWhenExpression>
+                </reportElement>
+                <imageExpression><![CDATA[$P{p_background_image}]]></imageExpression>
+            </image>
+        </band>
+    </background>
+
+    <title>
+        <band height="94">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="0" width="822" height="65" forecolor="#006699" backcolor="#006699" uuid="2dd1bb3b-4ef5-4bc8-8fba-229d26cfc1b4"/>
+                <textField>
+                    <reportElement style="Title" x="231" y="0" width="578" height="65" uuid="8f04869e-ff7c-44a9-82dc-74d08748073f">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <textElement textAlignment="Right"><font size="54" isBold="false"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_report_title}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Title" x="20" y="0" width="580" height="65" uuid="3b74419a-1f6f-49bb-8f85-6e5045703a85">
+                        <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                    </reportElement>
+                    <textElement textAlignment="Right"><font size="54" isBold="false"/></textElement>
+                    <textFieldExpression><![CDATA[$P{p_report_title}]]></textFieldExpression>
+                </textField>
+            </frame>
+
+            <textField>
+                <reportElement style="SubTitle" x="336" y="65" width="449" height="29" uuid="ba74d935-51c1-4c70-b255-d63cb281934f">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right"><font size="22" isBold="false"/></textElement>
+                <textFieldExpression><![CDATA[$P{p_report_subtitle}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement style="SubTitle" x="20" y="65" width="580" height="29" uuid="4bc9b3ee-5f06-4cb0-ad3f-f3cf492376b8">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right"><font size="22" isBold="false"/></textElement>
+                <textFieldExpression><![CDATA[$P{p_report_subtitle}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <detail>
+        <band height="14">
+            <!-- LTR detail -->
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement style="Detail" x="213" y="0" width="235" height="14" uuid="f5aa8a92-8242-45ec-b9f6-37e876b2d2db">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{book_id}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement style="Detail" x="448" y="0" width="354" height="14" uuid="4e93eb36-4a40-4bb7-bb2d-05fd0074e367">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} == null || !$P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <box leftPadding="3"><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement textAlignment="Left"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{book_title}]]></textFieldExpression>
+            </textField>
+
+            <!-- RTL detail -->
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement style="Detail" x="20" y="0" width="354" height="14" uuid="5814f2ec-5ffe-446c-a25e-16e4d7679e4d">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <box rightPadding="3"><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement textAlignment="Right"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{book_title}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement style="Detail" x="374" y="0" width="235" height="14" uuid="7f5d8cc5-feb4-42cf-b322-6997ab6f5fce">
+                    <printWhenExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}]]></printWhenExpression>
+                </reportElement>
+                <box><pen lineWidth="0.5"/><topPen lineWidth="0.5"/><leftPen lineWidth="0.5"/><bottomPen lineWidth="0.5"/><rightPen lineWidth="0.5"/></box>
+                <textElement textAlignment="Center"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{book_id}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="16">
+            <frame>
+                <reportElement mode="Opaque" x="2" y="0" width="800" height="16" forecolor="#D0B48E" backcolor="#006699" uuid="d72fb3f1-15f4-4f08-915f-561564e41305"/>
+                <textField evaluationTime="Report">
+                    <reportElement style="Column header" x="753" y="0" width="40" height="16" forecolor="#FFFFFF" uuid="7ca66334-508a-4c51-b53d-569c3e8159ff"/>
+                    <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement style="Column header" x="673" y="0" width="80" height="16" forecolor="#FFFFFF" uuid="80f3dafd-7321-490f-933f-07f1031d2dc9"/>
+                    <textElement textAlignment="Right" verticalAlignment="Middle"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                <textFieldExpression><![CDATA[$P{p_is_rtl} != null && $P{p_is_rtl}
+? ($P{p_label_page} + " " + $V{PAGE_NUMBER} + " " + $P{p_label_of})
+: ($P{p_label_page} + " " + $V{PAGE_NUMBER} + " " + $P{p_label_of})]]></textFieldExpression>
+                </textField>
+                <textField pattern="EEEEE dd MMMMM yyyy">
+                    <reportElement style="Column header" x="2" y="0" width="197" height="16" forecolor="#FFFFFF" uuid="188e9952-241b-42c7-9604-51cc9dd413e2"/>
+                    <textElement verticalAlignment="Middle"><font fontName="DejaVu Sans" size="12" isBold="false" pdfFontName="DejaVu Sans" pdfEncoding="Identity-H" isPdfEmbedded="true"/></textElement>
+                    <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </pageFooter>
+
+    <summary>
+        <band splitType="Stretch"/>
+    </summary>
+</jasperReport>

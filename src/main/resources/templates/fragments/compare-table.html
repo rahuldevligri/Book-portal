@@ -1,0 +1,30 @@
+<!-- fragments/compare-table.html -->
+<div th:fragment="compareTable">
+    <div class="compare-wrap">
+        <div class="compare-card">
+            <div class="compare-scroll">
+                <table class="compare-table">
+                    <tr class="title-row">
+                        <th th:text="#{feature}" class="feature-col">Feature</th>
+                        <th th:each="book : ${books}" class="compare-book-col">
+                            <span class="inl-db78cbe24a">$</span>
+                            <span class="compare-book-title" th:text="${book.title}">Book</span>
+                        </th>
+                    </tr>
+                    <tr th:if="${books == null || books.isEmpty()}">
+                        <td th:colspan="${books != null ? books.size() + 1 : 1}" th:text="#{compare.no.books}" class="compare-empty">No books selected for comparison</td>
+                    </tr>
+                    <tr th:if="${books != null && !books.isEmpty() && (featureRows == null || #lists.isEmpty(featureRows))}">
+                        <td th:colspan="${books.size() + 1}" th:text="#{book.features}" class="compare-empty">Book Features</td>
+                    </tr>
+                    <tr th:each="row, stat : ${featureRows}" th:classappend="${stat.index % 2 == 1} ? ' alt-row'" th:with="featureKey=${'feature.' + #strings.replace(#strings.toUpperCase(row.featureName), ' ', '_')}, featureLabel=${#messages.msgOrNull(featureKey)}">
+                        <td th:text="${featureLabel != null ? featureLabel : row.featureName}" class="feature-col">Feature Name</td>
+                        <td th:each="val : ${row.values}">
+                            <span th:text="${val}">-</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

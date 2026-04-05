@@ -1,0 +1,33 @@
+<!-- Common Footer Fragment for Book Portal -->
+<div th:fragment="common-footer" xmlns:th="http://www.w3.org/1999/xhtml">
+    <footer class="footer">
+        <div class="footer-content inl-3b4c911842">
+            <div class="inl-da12f2858b">
+                <span class="inl-775feec401">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2026</span> Book Portal</span>
+                <span th:text="#{rights.reserved}" class="inl-3cf362b6a2">. All rights reserved.</span>
+            </div>
+            <div class="inl-761d3addb2">
+                <a href="mailto:support@bookportal.com" th:text="#{contact.us}" class="inl-b3b239e760">Contact Us</a>
+                &nbsp;|&nbsp;
+                <a th:href="@{/about}" th:text="#{about.us}" class="inl-ad6e63daa7">About</a>
+                &nbsp;|&nbsp;
+                <a th:href="@{/privacy}" th:text="#{privacy.policy}" class="inl-ad6e63daa7">Privacy Policy</a>
+                &nbsp;|&nbsp;
+                <a th:href="@{/terms}" th:text="#{terms.of.use}" class="inl-ad6e63daa7">Terms of Use</a>
+                <span th:if="${session.userInfo != null and session.userInfo.userTypeId == 1}">
+                    &nbsp;|&nbsp;
+                    <a th:href="@{/admin/panel}" th:text="#{admin}" class="inl-b3b239e760">Admin</a>
+                </span>
+            </div>
+            <div class="inl-761d3addb2">
+                <span th:text="#{follow.us}">Follow us:</span>
+                <a href="https://facebook.com/bookportal" target="_blank" class="inl-8f93fd3a8b"><img src="/images/facebook-icon.png" alt="Facebook" class="inl-9e994196a6"></a>
+                <a href="https://twitter.com/bookportal" target="_blank" class="inl-8f93fd3a8b"><img src="/images/twitter-icon.png" alt="Twitter" class="inl-9e994196a6"></a>
+                <a href="https://instagram.com/bookportal" target="_blank" class="inl-8f93fd3a8b"><img src="/images/instagram-icon.png" alt="Instagram" class="inl-9e994196a6"></a>
+            </div>
+            <div class="inl-928d9c5505">
+                <span th:text="#{powered.by}">Powered by Spring Boot &amp; Thymeleaf</span>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,87 @@
+<!-- Common Header Fragment for Book Portal -->
+<div th:fragment="common-header" xmlns:th="http://www.thymeleaf.org">
+    <table class="header-table" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td width="40%" class="logo-text">
+                <a th:href="@{/dashboard}" th:title="#{home.tooltip}">
+                    <img src="/images/logo.png" th:alt="#{logo.alt}" class="header-logo inl-c93c84b1ea">
+                </a>
+            </td>
+            <td width="30%" class="header-user">
+                <div class="inl-d7032e57a4">
+                    <form method="get" id="langChangeForm" class="inl-ad875abe64">
+                                                <input type="hidden" name="type" th:if="${type != null}" th:value="${type}" />
+                        <select id="langSelect" name="lang" onchange="document.getElementById('langChangeForm').submit()" class="inl-c8eea84a8d">
+                            <option th:value="en" th:selected="${#locale.language == 'en'}">English</option>
+                            <option th:value="ar" th:selected="${#locale.language == 'ar'}">العربية</option>
+                            <option th:value="fr" th:selected="${#locale.language == 'fr'}">Français</option>
+                            <option th:value="es" th:selected="${#locale.language == 'es'}">Español</option>
+                        </select>
+                        <input type="hidden" name="authorId" th:if="${authorId != null}" th:value="${authorId}" />
+                        <input type="hidden" name="categoryId" th:if="${categoryId != null}" th:value="${categoryId}" />
+                        <input type="hidden" name="publisherId" th:if="${publisherId != null}" th:value="${publisherId}" />
+                        <input type="hidden" name="page" th:if="${pageNumber != null}" th:value="${pageNumber}" />
+                        <input type="hidden" name="size" th:if="${pageSize != null}" th:value="${pageSize}" />
+                        <input type="hidden" name="sort" th:if="${sort != null}" th:value="${sort}" />
+                        <input type="hidden" name="direction" th:if="${direction != null}" th:value="${direction}" />
+                        <input type="hidden" name="q" th:if="${query != null}" th:value="${query}" />
+                        <input type="hidden" name="matchType" th:if="${matchType != null}" th:value="${matchType}" />
+                    </form>
+                </div>
+                <b th:text="|#{welcome} ${#strings.toUpperCase(session.userInfo != null ? session.userInfo.userName : 'USER')}!|">
+                    Welcome USER!
+                </b>
+                <br>
+                <font face="verdana, helvetica"
+                      th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}" class="inl-11a508128d">
+                    October 28, 2006
+                </font>
+            </td>
+            <td width="30%" class="header-links">
+                <form th:action="@{/logout}" method="post" class="inl-cccfa4560d">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn-link">
+                        &raquo; <span th:text="#{logout}">Logout</span>
+                    </button>
+                </form>
+                &nbsp;&nbsp;&nbsp; »
+                <a th:href="@{/user-options}" th:text="#{user.options}">User Options</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center">
+                <p class="menutd">
+                    <span><font color="#85BFEB">&raquo;</font></span>
+                    <a th:href="@{/authors}" class="menutdlinks" th:text="#{author.search}">Author Search</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <span><font color="#85BFEB">&raquo;</font></span>
+                    <a th:href="@{/publishers}" class="menutdlinks" th:text="#{publisher.search}">Publisher Search</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <span><font color="#85BFEB">&raquo;</font></span>
+                    <a th:href="@{/categories}" class="menutdlinks" th:text="#{category.search}">Category Search</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <!-- Embedded Search Bar from Dashboard -->
+    <form name="jump" th:action="@{/search/quick}" method="get" class="inl-580304bb6f">
+    <div class="search-bar-wrapper">
+        <div class="search-bar-row">
+            <label class="search-bar-label"><b><span style="color:#BDDFFF" th:text="#{find.label}">FIND</span></b></label>
+            <input class="search-bar-input" name="q" th:value="${query}" />
+            <select class="search-bar-select" name="type">
+                <option value="Author" th:selected="${type == 'Author'}" th:text="#{search.option.author}">Author</option>
+                <option value="Publisher" th:selected="${type == 'Publisher'}" th:text="#{search.option.publisher}">Publisher</option>
+                <option value="Title" th:selected="${type == null || type == 'Title'}" th:text="#{search.option.title}">Title</option>
+            </select>
+            <input type="hidden" name="matchType" th:value="${matchType != null ? matchType : 'contains'}" />
+            <button type="submit" class="search-bar-btn" th:text="#{search.action}">Search</button>
+            <a class="search-bar-adv-btn" th:href="@{/advanced-search}" th:text="#{advanced.search}">Advanced Search</a>
+        </div>
+        <div th:if="${searchValidationError}" class="search-bar-error">
+            <b th:text="#{search.validation.min}"></b>
+        </div>
+    </div>
+    </form>
+</div>
+

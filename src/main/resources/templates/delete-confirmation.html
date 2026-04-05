@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${#messages.msgOrNull(confirmTitleKey)} ?: #{confirm.delete.title}">Confirm Delete</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="modal-backdrop">
+    <div class="modal-card">
+        <h3 class="modal-title" th:text="${#messages.msgOrNull(confirmTitleKey)} ?: #{confirm.delete.title}">Confirm Delete</h3>
+           <div
+               th:text="${#messages.msgOrNull(confirmMessageKey)} ?: #{confirm.delete.default.message}" class="inl-738ac8c115">
+            Are you sure you want to delete selected records?
+        </div>
+        <div class="action-row">
+            <form method="post" th:action="@{${confirmAction}}" class="inl-cccfa4560d">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" name="confirm" value="true" />
+                <th:block th:each="entry : ${confirmHiddenParams}">
+                    <input th:each="v : ${entry.value}" type="hidden" th:name="${entry.key}" th:value="${v}" />
+                </th:block>
+                <button class="btn-inline secondary btn-delete" type="submit" th:text="#{delete}">Delete</button>
+            </form>
+            <a class="btn-inline" th:href="@{${cancelUrl}}" th:text="#{cancel}">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

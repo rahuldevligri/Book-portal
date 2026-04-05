@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{edit.profile}">Edit Profile</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<table width="100%">
+    <tr>
+        <td align="center">
+
+            <table width="60%" class="panel inl-d9f149756a" cellpadding="8">
+
+                <tr class="panel-header">
+                    <td colspan="2" align="center" th:text="#{edit.profile}">Edit Profile</td>
+                </tr>
+
+                <!-- SUCCESS -->
+                    <tr th:if="${success}">
+                        <td colspan="2" align="center" class="message-success">
+                            <b th:text="${success}"></b>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${info}">
+                        <td colspan="2" align="center" class="message-info">
+                            <b th:text="${info}"></b>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${error}">
+                        <td colspan="2" align="center" class="message-error">
+                            <b th:text="${error}"></b>
+                        </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="panel-body">
+
+                        <form th:action="@{/edit-profile}"
+                              method="post"
+                              th:object="${editProfileForm}">
+
+                            <!-- CSRF -->
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
+
+                            <table width="100%" cellpadding="6">
+
+                                <tr>
+                                    <td align="right"><b th:text="#{first.name}">First Name:</b></td>
+                                    <td>
+                                        <input type="text" th:field="*{firstName}">
+                                        <div th:if="${#fields.hasErrors('firstName')}" class="message-error inl-5e0faad207" th:errors="*{firstName}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b th:text="#{last.name}">Last Name:</b></td>
+                                    <td>
+                                        <input type="text" th:field="*{lastName}">
+                                        <div th:if="${#fields.hasErrors('lastName')}" class="message-error inl-5e0faad207" th:errors="*{lastName}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b th:text="#{email}">E-Mail Address:</b></td>
+                                    <td>
+                                        <input type="text" th:field="*{email}">
+                                        <div th:if="${#fields.hasErrors('email')}" class="message-error inl-5e0faad207" th:errors="*{email}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b th:text="#{username}">User Name:</b></td>
+                                    <td>
+                                        <input type="text" th:field="*{username}" readonly class="disabled-field">
+                                        <div th:if="${#fields.hasErrors('username')}" class="message-error inl-5e0faad207" th:errors="*{username}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b th:text="#{secret.question}">Secret Question:</b></td>
+                                    <td>
+                                        <select th:field="*{secretQuestionId}">
+                                            <option value="" th:text="#{select.question}">-- Select a Question --</option>
+                                            <option th:each="question : ${secretQuestions}" th:value="${question.id}" th:text="#{${question.question}}"></option>
+                                        </select>
+                                        <div th:if="${#fields.hasErrors('secretQuestionId')}" class="message-error inl-5e0faad207" th:errors="*{secretQuestionId}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right"><b th:text="#{secret.answer}">Secret Answer:</b></td>
+                                    <td>
+                                        <input type="text" th:field="*{secretAnswer}">
+                                        <div th:if="${#fields.hasErrors('secretAnswer')}" class="message-error inl-5e0faad207" th:errors="*{secretAnswer}"></div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <br>
+                                        <button type="submit" th:text="#{save.profile}">Save Profile</button>
+                                        &nbsp;&nbsp;
+                                        <a th:href="@{/user-options}" th:text="#{cancel}">Cancel</a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</html>
+

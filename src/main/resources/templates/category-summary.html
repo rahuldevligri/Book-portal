@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'" th:classappend="${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="${category.category}">Category Summary</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+</head>
+<body th:classappend="${#locale.language}=='ar'?'rtl':'ltr'">
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="classic-summary-wrap">
+    <h1 class="classic-summary-title" th:text="${category.category}">Category Name</h1>
+    <hr class="classic-summary-divider">
+
+        <div class="classic-summary-row">
+        <div class="classic-summary-category" th:text="${category.category}">Programming</div>
+        <div class="classic-summary-meta">
+            <a class="classic-summary-books"
+               th:href="@{/books(categoryId=${category.id},returnTo=${'/categories/' + category.id})}"
+               th:text="${bookCount} + ' ' + #{books.suffix}">
+                10 book(s)
+            </a>
+            <a class="classic-summary-view"
+               th:href="@{/books(categoryId=${category.id},returnTo=${'/categories/' + category.id})}"
+               th:text="#{view}">
+                View
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+
+</body>
+</html>
+

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'"
+      th:classappend="${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+        
+    <title th:text="#{dashboard.title}">Book Portal Dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+    <meta name="ProgId" content="FrontPage.Editor.Document">
+</head>
+
+<body th:classappend="${#locale.language}=='ar'?'rtl':'ltr'" topmargin="0" leftmargin="0">
+
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="page-centered-content dashboard-content">
+<table>
+    <tr>
+        <td width="100%" colspan="3">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td width="100%">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="72%" valign="top">
+                        <div align="center"><b><font size="3" th:text="#{dashboard.search.header}">Search over 10,000 titles from over 15 Publishers</font></b></div>
+
+                        <div align="center">
+                            <center>
+                                <table border="0" cellpadding="4" width="92%" cellspacing="3">
+                                    <tr>
+                                        <td width="100%" bgcolor="#EEF5F8" colspan="2" height="55" valign="top">
+                                                <div align="center"><font class="searchheader"><font color="#106194" th:text="#{dashboard.book.manager}">BOOK MANAGER</font></font>
+                                                    &nbsp;<font class="searchtext"><br>
+                                                    </font><font class="searchtext" th:text="#{dashboard.manager.desc}">Book Portal Manager lets you search books quickly by title or browse by category. Author and publisher summaries remain available from their pages.</font></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="50%" bgcolor="#E4EFF5" height="55" valign="top">
+                                            <font class="searchheader"><a th:href="@{/authors}"><font color="#106194" th:text="#{dashboard.author.search}">Author SEARCH</font></a><br></font>
+                                            <font class="searchtext" th:text="#{dashboard.author.desc}">Users can enter full or partial author name to receive complete valid results from the Database.</font>
+                                        </td>
+                                        <td width="50%" bgcolor="#E4EFF5" height="55" valign="top">
+                                            <font class="searchheader"><a th:href="@{/publishers}"><font color="#106194" th:text="#{dashboard.publisher.search}">Publisher SEARCH</font></a><br></font>
+                                            <font class="searchtext" th:text="#{dashboard.publisher.desc}">Users can easily find multiple publishers.</font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="margin" width="50%" bgcolor="#EEF5F8" height="55" valign="top">
+                                            <font class="searchheader"><a th:href="@{/categories}"><font color="#106194" th:text="#{dashboard.category.search}">Category SEARCH</font></a><br></font>
+                                            <font class="searchtext" th:text="#{dashboard.category.desc}">Users can browse books by category.</font>
+                                        </td>
+                                        <td class="margin" width="50%" bgcolor="#EEF5F8" height="55" valign="top">
+                                            <font class="searchheader"><a href="#"><font color="#106194" th:text="#{dashboard.support}">CUSTOMER SUPPORT</font></a><br></font>
+                                            <font class="searchtext" th:text="#{dashboard.support.desc}">Users can depend on Book Portal support team with its domain expertise to assist with all questions and inputs.</font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="margin" width="50%" bgcolor="#EEF5F8" height="55" valign="top">
+                                            <font class="searchheader"><a th:href="@{/reports/publishers}"><font color="#106194" th:text="#{dashboard.report.search}">Publisher REPORT</font></a><br></font>
+                                            <font class="searchtext" th:text="#{dashboard.report.desc}">Generate publisher report for all publishers or one selected publisher.</font>
+                                        </td>
+                                        <td class="margin" width="50%" bgcolor="#EEF5F8" height="55" valign="top">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </center>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- Removed duplicate static footer -->
+</table>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

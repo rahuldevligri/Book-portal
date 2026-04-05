@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${#messages.msgOrNull(managerTitleKey)} ?: 'Partner Manager'">Partner Manager</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="table-container">
+    <div th:if="${success}" class="message success">[[${success}]]</div>
+    <div th:if="${error}" class="message error">[[${error}]]</div>
+    <div th:if="${noSelection}" class="message error" th:text="#{admin.action.delete.noselection}">Please select at least one record to delete.</div>
+    <div th:if="${partners == null || #lists.isEmpty(partners)}" class="message error" th:text="${#messages.msgOrNull(emptyMessageKey)} ?: 'No records found.'">No records found.</div>
+
+    <form method="post" th:action="@{${deleteActionPath}}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="table-title" th:text="${#messages.msgOrNull(listTitleKey)} ?: 'Partner List'">Partner List</div>
+        <table class="table-shell">
+            <thead>
+            <tr>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''"></th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=name&direction=' + (sort == 'name' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{name}">Name</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'name' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=address&direction=' + (sort == 'address' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{address}">Address</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'address' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=telephone&direction=' + (sort == 'telephone' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{telephone}">Telephone</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'telephone' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=fax&direction=' + (sort == 'fax' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{fax}">Fax</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'fax' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=email&direction=' + (sort == 'email' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{email}">Email</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'email' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+                <th class="partner-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                    <a th:href="${pageBasePath + '?page=0&size=' + pageSize + '&sort=webSite&direction=' + (sort == 'webSite' and direction == 'asc' ? 'desc' : 'asc')}">
+                        <span th:text="#{website}">Website</span>
+                        <span class="sort-icon" aria-hidden="true"
+                              th:text="${sort == 'webSite' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                    </a>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="partner : ${partners}">
+                <td><input type="checkbox" th:name="${checkboxName}" th:value="${partner.id}" /></td>
+                <td><a th:href="@{${editBasePath + partner.id}}" class="table-link" th:text="${partner.name}">Name</a></td>
+                <td th:text="${partner.address}">Address</td>
+                <td th:text="${partner.telephone}">Telephone</td>
+                <td th:text="${partner.fax}">Fax</td>
+                <td th:text="${partner.email}">Email</td>
+                <td><a th:if="${partner.webSite}" th:href="${partner.webSite}" th:text="${partner.webSite}" class="table-link" target="_blank">Website</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(partners)}">
+                <td colspan="7" th:text="${#messages.msgOrNull(emptyMessageKey)} ?: 'No records found.'">No records found.</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="action-row admin-table-actions-center">
+            <a class="btn-inline"
+               th:href="@{${addPath}}"
+               th:text="#{add}">Add</a>
+            <button class="btn-inline secondary btn-delete"
+                    type="submit"
+                    th:text="#{delete}">Delete</button>
+        </div>
+    </form>
+    <div class="admin-pagination" th:if="${totalPages != null && totalPages > 1}">
+        <a th:if="${pageNumber > 0}" th:href="@{${prevPagePath}}" th:text="#{previous}">Previous</a>
+        <span th:text="#{page}">Page</span> <span th:text="${pageNumber + 1}">1</span> <span th:text="#{of}">of</span> <span th:text="${totalPages}">1</span>
+        <a th:if="${pageNumber + 1 < totalPages}" th:href="@{${nextPagePath}}" th:text="#{next}">Next</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

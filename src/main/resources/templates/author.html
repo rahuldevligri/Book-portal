@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{author.search}">Author Search</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body topmargin="0" leftmargin="0">
+
+<!-- HEADER -->
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+
+<div class="search-wrapper">
+    <div class="classic-summary-wrap" th:if="${groupedSearch}">
+        <h1 class="classic-summary-title">
+            <span th:text="#{author.search}">Author Search</span>
+            <span th:text="${query != null && !#strings.isEmpty(query) ? ' ' + #messages.msg('for') + ' ' + query : ''}"></span>
+        </h1>
+        <hr class="classic-summary-divider">
+
+        <div th:if="${authorGroups == null || #lists.isEmpty(authorGroups)}" class="classic-summary-empty" th:text="#{no.authors.found}">
+            No authors found.
+        </div>
+
+        <div th:if="${authorGroups != null && !#lists.isEmpty(authorGroups)}" th:each="group : ${authorGroups}">
+            <h2 class="classic-summary-title"
+                th:text="${((group.author.firstName != null ? group.author.firstName : '') + ' ' + (group.author.lastName != null ? group.author.lastName : '')).trim()}">
+                Author Name
+            </h2>
+
+            <div th:if="${group.categories == null || #lists.isEmpty(group.categories)}" class="classic-summary-empty" th:text="#{no.books.found.for.author.search}">
+                No books found for this author.
+            </div>
+
+            <div th:if="${group.categories != null && !#lists.isEmpty(group.categories)}">
+                <div class="classic-summary-row" th:each="cat : ${group.categories}">
+                    <div class="classic-summary-category" th:text="${cat.categoryName}">Category Name</div>
+                    <div class="classic-summary-meta">
+                        <a class="classic-summary-books"
+                           th:href="@{/books(authorId=${group.author.id},categoryId=${cat.categoryId},returnTo=${'/authors?q=' + query + '&matchType=' + matchType})}"
+                           th:text="${cat.bookCount} + ' ' + #{books.suffix}">
+                            0 book(s)
+                        </a>
+                        <a class="classic-summary-view"
+                           th:href="@{/books(authorId=${group.author.id},categoryId=${cat.categoryId},returnTo=${'/authors?q=' + query + '&matchType=' + matchType})}"
+                           th:text="#{view}">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="simple-search-block" th:if="${!groupedSearch}">
+        <h1 class="simple-search-title" th:text="#{author.search}">Author Search</h1>
+
+        <div class="simple-search-body" th:if="${#lists.isEmpty(authors)}">
+            <span th:text="#{no.authors.found}">No authors found.</span>
+        </div>
+
+        <div class="simple-search-body" th:if="${!#lists.isEmpty(authors)}">
+            <a th:each="author : ${authors}"
+               th:href="@{'/authors/' + ${author.id}}"
+               class="simple-search-link"
+               th:text="${((author.firstName != null ? author.firstName : '') + ' ' + (author.lastName != null ? author.lastName : '')).trim()}">
+                Author Name
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<br>
+
+</body>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</html>
+

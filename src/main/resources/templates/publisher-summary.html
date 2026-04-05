@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'" th:classappend="${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="${publisher.name}">Publisher Summary</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body th:classappend="${#locale.language}=='ar'?'rtl':'ltr'" topmargin="0" leftmargin="0">
+
+<!-- HEADER -->
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="classic-summary-wrap">
+    <h1 class="classic-summary-title" th:text="${publisher.name}">Publisher Name</h1>
+    <hr class="classic-summary-divider">
+
+    <div th:if="${categories == null || #lists.isEmpty(categories)}" class="classic-summary-empty" th:text="#{no.books.found.for.publisher}">No books found for this publisher.</div>
+
+    <div th:if="${categories != null && !#lists.isEmpty(categories)}">
+        <div class="classic-summary-row" th:each="cat : ${categories}">
+            <div class="classic-summary-category" th:text="${cat.categoryName}">Programming</div>
+            <div class="classic-summary-meta">
+                <a class="classic-summary-books"
+                   th:href="@{/books(publisherId=${publisher.id},categoryId=${cat.categoryId},returnTo=${'/publishers/' + publisher.id})}"
+                   th:text="${cat.bookCount} + ' ' + #{books.suffix}">
+                    10 book(s)
+                </a>
+                <a class="classic-summary-view"
+                   th:href="@{/books(publisherId=${publisher.id},categoryId=${cat.categoryId},returnTo=${'/publishers/' + publisher.id})}"
+                   th:text="#{view}">
+                    View
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+
+</body>
+</html>
+

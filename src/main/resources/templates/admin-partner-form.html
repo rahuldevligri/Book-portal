@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="${#messages.msgOrNull(partnerTitleKey)} ?: 'Partner'">Partner</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+<div class="edit-shell">
+    <div th:if="${success}" class="message success">[[${success}]]</div>
+    <div th:if="${error}" class="message error">[[${error}]]</div>
+    <div class="edit-title" th:text="${#messages.msgOrNull(partnerTitleKey)} ?: 'Partner'">Partner</div>
+    <form method="post" th:object="${publisherDTO}" th:action="@{${partnerActionPath}}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:if="${publisherDTO.id}" th:field="*{id}" />
+
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{name}">Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{name}" />
+                <div th:if="${#fields.hasErrors('name')}" class="message-error inl-5e0faad207" th:errors="*{name}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{address}">Address:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{address}" />
+                <div th:if="${#fields.hasErrors('address')}" class="message-error inl-5e0faad207" th:errors="*{address}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{telephone}">Telephone:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{telephone}" />
+                <div th:if="${#fields.hasErrors('telephone')}" class="message-error inl-5e0faad207" th:errors="*{telephone}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{fax}">Fax:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{fax}" />
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{email}">E-Mail Address:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{email}" />
+                <div th:if="${#fields.hasErrors('email')}" class="message-error inl-5e0faad207" th:errors="*{email}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{website}">Website:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{webSite}" />
+            </div>
+        </div>
+        <div class="edit-actions">
+            <button type="submit" th:text="#{save}">Save</button>
+            <a class="btn-inline secondary" th:href="@{${cancelPath}}" th:text="#{cancel}">Cancel</a>
+        </div>
+    </form>
+</div>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{category.search}">Category Search</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body topmargin="0" leftmargin="0">
+
+
+<!-- HEADER -->
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+
+<div class="search-wrapper">
+    <div class="simple-search-block">
+        <h1 class="simple-search-title" th:text="#{category.search}">Category Search</h1>
+
+        <div class="simple-search-body" th:if="${categories == null || #lists.isEmpty(categories)}">
+            <span th:text="#{no.categories.found}">No categories found.</span>
+        </div>
+
+        <div class="simple-search-body" th:if="${categories != null && !#lists.isEmpty(categories)}">
+            <a th:each="category : ${categories}"
+               th:href="@{/categories/{id}(id=${category.id},returnTo='/categories')}"
+               class="simple-search-link"
+               th:text="${category.category}">
+                Category Name
+            </a>
+        </div>
+    </div>
+</div>
+<br>
+
+</body>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</html>
+

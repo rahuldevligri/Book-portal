@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{api.form}">API Form</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="form-container">
+    <form th:object="${apiDTO}" th:action="@{${formAction}}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="form-title" th:text="#{api.form}">API Form</div>
+        <div class="form-row">
+            <label for="apiUrl" th:text="#{api.url}">API URL</label>
+            <input type="text" id="apiUrl" th:field="*{apiUrl}" />
+            <div th:if="${#fields.hasErrors('apiUrl')}" class="message-error" th:errors="*{apiUrl}"></div>
+            <input type="hidden" th:if="*{id} != null" th:field="*{id}" />
+        </div>
+        <div class="action-row">
+            <button class="btn-inline" type="submit" th:text="#{add}">Save</button>
+            <a class="btn-inline secondary" th:href="@{/admin/apis}" th:text="#{cancel}">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

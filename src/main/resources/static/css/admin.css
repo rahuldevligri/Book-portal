@@ -1,0 +1,330 @@
+/* === ADMIN TABLE RESPONSIVE ENHANCEMENTS === */
+
+/* Multiple groups display styling */
+.user-groups-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 200px;
+}
+
+.user-group-badge {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #0277bd;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #81d4fa;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(2, 119, 189, 0.2);
+}
+
+.user-group-badge:hover {
+    background: linear-gradient(135deg, #bbdefb, #90caf9);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(2, 119, 189, 0.3);
+}
+
+/* Group management for privileges page */
+.group-assignment-section {
+    background: var(--bp-surface-alt);
+    border: 2px solid #e1f5fe;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.group-assignment-header {
+    color: #0277bd;
+    font-weight: 600;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #b3e5fc;
+}
+
+.group-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.group-checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.group-checkbox-item:hover {
+    border-color: #0277bd;
+    background: #f3f9ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(2, 119, 189, 0.15);
+}
+
+.group-checkbox-item input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.1);
+}
+
+.group-checkbox-item label {
+    color: #333;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0;
+    flex: 1;
+}
+
+.group-checkbox-item.selected {
+    background: #e3f2fd;
+    border-color: #0277bd;
+    box-shadow: 0 0 0 2px rgba(2, 119, 189, 0.2);
+}
+
+/* Prevent duplicate assignment warning */
+.duplicate-warning {
+    background: #fff3e0;
+    color: #e65100;
+    border: 2px solid #ffb74d;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+.duplicate-warning::before {
+    content: "⚠️ ";
+    margin-right: 8px;
+}
+
+/* Mobile responsive for group displays */
+@media (max-width: 768px) {
+    .user-groups-container {
+        max-width: 100%;
+    }
+
+    .user-group-badge {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .group-selection-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .group-checkbox-item {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-group-badge {
+        font-size: 9px;
+        padding: 1px 5px;
+        margin-bottom: 2px;
+    }
+
+    .group-assignment-section {
+        padding: 12px;
+        margin: 12px 0;
+    }
+}
+
+/* Improved form styling for admin pages */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--bp-heading-text);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--bp-border-table);
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--bp-accent);
+    box-shadow: 0 0 5px rgba(0, 152, 202, 0.3);
+}
+
+/* Enhanced scroll indicators */
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: var(--bp-border-table);
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--bp-accent);
+}
+
+/* Loading and empty state improvements */
+.table-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.table-empty-state h3 {
+    color: var(--bp-heading-text);
+    margin-bottom: 10px;
+}
+
+/* Mobile-optimized checkbox styling */
+@media (max-width: 768px) {
+    .table-shell input[type="checkbox"] {
+        transform: scale(1.2);
+        margin: 0;
+    }
+
+    /* Mobile delete button adjustments */
+    .btn-delete {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        min-width: 80px;
+    }
+
+    .btn-inline {
+        margin-bottom: 5px;
+    }
+}
+
+/* Additional mobile responsive for delete buttons */
+@media (max-width: 480px) {
+    .btn-delete {
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+        width: 100%;
+        max-width: 120px;
+    }
+
+    .action-row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .action-row .btn-inline {
+        margin-bottom: 8px;
+        text-align: center;
+    }
+}
+
+/* Print styles for admin tables */
+@media print {
+    .table-container {
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .table-shell {
+        min-width: auto !important;
+        font-size: 12px !important;
+    }
+
+    .action-row,
+    .admin-pagination {
+        display: none !important;
+    }
+
+    .table-shell th,
+    .table-shell td {
+        padding: 5px !important;
+    }
+}
+
+/* Checkbox Group Styles for Group Assignment */
+.checkbox-group {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--bp-border-table);
+    border-radius: 5px;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.checkbox-item {
+    margin-bottom: 8px;
+}
+
+.checkbox-item:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    margin-left: 0;
+}
+
+.checkbox-label span {
+    color: #333;
+}
+
+/* Selected User Display */
+.selected-user-display {
+    padding: 10px;
+    background: #e7f3ff;
+    border: 1px solid #b3d7ff;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #0066cc;
+}
+
+/* Modal Stack Form Spacing */
+.stack-form>label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stack-form>label:first-child {
+    margin-top: 0;
+}

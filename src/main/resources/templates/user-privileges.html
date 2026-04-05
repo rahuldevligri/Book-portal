@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{user.privileges}">User Privileges</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body class="privileges-page">
+<div th:if="${loading}" class="loading-overlay active">
+    <div class="loading-spinner" role="status" th:attr="aria-label=#{loading}"></div>
+</div>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="priv-page">
+    <div th:if="${success}" class="message success" th:text="${success}"></div>
+    <div th:if="${info}" class="message info" th:text="${info}"></div>
+    <div th:if="${error}" class="message error" th:text="${error}"></div>
+    <div th:if="${groupPrivileges == null || #lists.isEmpty(groupPrivileges)} and !${error}" class="message error" th:text="#{no.groups.found}"></div>
+        <div class="priv-title" th:text="#{app.group.name}">App Group</div>
+        <div class="table-container card">
+            <div class="table-title" th:text="#{app.group.management}">App Group Management</div>
+            <table class="table-shell" role="table" th:attr="aria-label=#{app.group.management}">
+                <thead role="rowgroup">
+                <tr role="row">
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''"></th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/privileges(tab='user-group',groupsSort='id',groupsDirection=${groupsSort == 'id' and groupsDirection == 'asc' ? 'desc' : 'asc'},groupsPage=0,size=${pageSize},selectedGroupId=${selectedGroupId})}">
+                            <span th:text="#{id}">ID</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${groupsSort == 'id' ? (groupsDirection == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/privileges(tab='user-group',groupsSort='groupName',groupsDirection=${groupsSort == 'groupName' and groupsDirection == 'asc' ? 'desc' : 'asc'},groupsPage=0,size=${pageSize},selectedGroupId=${selectedGroupId})}">
+                            <span th:text="#{app.group.name}">Name</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${groupsSort == 'groupName' ? (groupsDirection == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''" th:text="#{actions}">Actions</th>
+                </tr>
+                </thead>
+                <tbody role="rowgroup">
+                <tr th:each="g : ${groupPrivileges}" role="row" th:classappend="${selectedGroupId != null and selectedGroupId == g.id} ? 'group-selected'">
+                    <td><input type="checkbox" name="groupIds" th:value="${g.id}" form="deleteGroupsForm" th:attr="aria-label=#{select.group.aria(${g.groupName})}" /></td>
+                    <td>
+                        <a class="group-link"
+                           th:href="@{/admin/privileges(tab=${tab},selectedGroupId=${g.id},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                           th:text="${g.id}">1</a>
+                    </td>
+                    <td>
+                        <a class="group-link"
+                           th:href="@{/admin/privileges(tab=${tab},selectedGroupId=${g.id},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                           th:text="${g.groupName}">Group</a>
+                    </td>
+                    <td class="action-select-cell"
+                        th:attr="title=#{select.group}"
+                        th:onclick="|window.location.href='@{/admin/privileges(tab=${tab},selectedGroupId=${g.id},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}'|">
+                        <a class="btn-inline"
+                           onclick="event.stopPropagation();"
+                           th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${g.id},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection},modal='edit-group',modalGroupId=${g.id})}"
+                           th:text="#{update}">Update</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(groupPrivileges)}">
+                    <td colspan="4" th:text="#{no.groups.found}">No groups found.</td>
+                </tr>
+                </tbody>
+            </table>
+                <!-- Pagination for App Group Management -->
+                    <div th:if="${groupsTotalPages > 1}" class="pagination-row">
+                        <nav class="pagination-nav">
+                            <a th:if="${groupsPage > 0}"
+                               th:href="@{/admin/privileges(tab='user-group',groupsPage=${groupsPage-1},size=${pageSize},selectedGroupId=${selectedGroupId},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               class="arrow" th:text="'« ' + #{prev}">&laquo; Prev</a>
+                            <a th:each="i : ${#numbers.sequence(0, groupsTotalPages-1)}"
+                               th:href="@{/admin/privileges(tab='user-group',groupsPage=${i},size=${pageSize},selectedGroupId=${selectedGroupId},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               th:text="${i+1}"
+                               th:classappend="${groupsPage == i} ? 'active'">
+                            </a>
+                            <a th:if="${groupsPage < groupsTotalPages-1}"
+                               th:href="@{/admin/privileges(tab='user-group',groupsPage=${groupsPage+1},size=${pageSize},selectedGroupId=${selectedGroupId},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               class="arrow" th:text="#{next} + ' »'">Next &raquo;</a>
+                        </nav>
+                    </div>
+
+            <div class="action-row admin-table-actions-center inl-d2c171b18b">
+                    <div class="inl-86a52091a9">
+                        <a class="btn-inline"
+                           th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize},modal='add-group')}"
+                           th:text="#{add.group}">Add Group</a>
+                        <a class="btn-inline"
+                           th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize},modal='edit-user-groups')}"
+                           th:text="#{assign.user.groups}">Assign User to Groups</a>
+                        <form id="deleteGroupsForm" th:action="@{/admin/privileges/group-management/delete}" method="post" class="inl-1169661891">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button class="btn-inline secondary btn-delete"
+                                    type="submit"
+                                    th:text="#{delete.groups}">Delete Groups</button>
+                        </form>
+                    </div>
+            </div>
+        </div>
+
+    <div class="card inl-f5f25a3711" id="assignment-panel">
+        <div class="tabs-container">
+            <ul class="tab-nav">
+                <li><a th:classappend="${tab == 'user-group'} ? ' active'" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{user.group.option}">User Group</a></li>
+                <li><a th:classappend="${tab == 'api-manager'} ? ' active'" th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{api.manager.option}">API Manager</a></li>
+            </ul>
+        </div>
+
+        <div th:if="${tab == 'user-group'}">
+            <div class="section-subtitle" th:text="#{user.privileges}">User Privileges</div>
+
+            <div class="table-container inl-2285bd973e">
+            <table class="table-shell" role="table" th:attr="aria-label=#{user.privileges}">
+                <thead role="rowgroup">
+                <tr role="row">
+                    <th scope="col" th:attr="aria-label=#{select.user}" class="inl-82eb62afb6"></th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},usersSort='firstName',usersDirection=${usersSort == 'firstName' and usersDirection == 'asc' ? 'desc' : 'asc'},usersPage=0,size=${pageSize},groupsSort=${groupsSort},groupsDirection=${groupsDirection},apisSort=${apisSort},apisDirection=${apisDirection})}">
+                            <span th:text="#{user}">User</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${usersSort == 'firstName' ? (usersDirection == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''" th:text="#{actions}">Actions</th>
+                </tr>
+                </thead>
+                <tbody role="rowgroup">
+                <tr th:each="u : ${users}" role="row">
+                    <td><input type="checkbox" name="userIds" th:value="${u.id}" form="deleteUsersForm" th:attr="aria-label=#{select.user.aria(${u.firstName + ' ' + (u.lastName != null ? u.lastName : '')})}" /></td>
+                    <td th:text="${u.firstName + ' ' + (u.lastName != null ? u.lastName : '') + (u.userName != null ? ' (' + u.userName + ')' : '')}">User</td>
+                    <td>
+                        <a class="btn-inline"
+                           th:href="@{'/admin/users/edit/' + ${u.id} + '?returnTo=privileges'}"
+                           th:text="#{update}">Update</a>
+                    </td>
+                </tr>
+                <tr th:if="${selectedGroupId == null}">
+                    <td colspan="3" class="empty-state" th:text="#{select.app.group.to.view.users}">Select an app group to view users.</td>
+                </tr>
+                <tr th:if="${selectedGroupId != null and #lists.isEmpty(users)}">
+                    <td colspan="3" th:text="#{no.users.in.group}">No users found in this group.</td>
+                </tr>
+                </tbody>
+            </table>
+                <!-- Pagination for User table -->
+                    <div th:if="${usersTotalPages > 1}" class="pagination-row">
+                        <nav class="pagination-nav">
+                            <a th:if="${usersPage > 0}"
+                               th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},usersPage=${usersPage-1},size=${pageSize},usersSort=${usersSort},usersDirection=${usersDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               class="arrow" th:text="'« ' + #{prev}">&laquo; Prev</a>
+                            <a th:each="i : ${#numbers.sequence(0, usersTotalPages-1)}"
+                               th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},usersPage=${i},size=${pageSize},usersSort=${usersSort},usersDirection=${usersDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               th:text="${i+1}"
+                               th:classappend="${usersPage == i} ? 'active'">
+                            </a>
+                            <a th:if="${usersPage < usersTotalPages-1}"
+                               th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},usersPage=${usersPage+1},size=${pageSize},usersSort=${usersSort},usersDirection=${usersDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                               class="arrow" th:text="#{next} + ' »'">Next &raquo;</a>
+                        </nav>
+                    </div>
+
+            <div class="action-row admin-table-actions-center inl-d2c171b18b">
+                <div class="inl-86a52091a9">
+                    <a class="btn-inline"
+                       th:href="@{'/admin/users/add?returnTo=privileges'}"
+                       th:text="#{add}">Add</a>
+                    <form id="deleteUsersForm" th:action="@{/admin/privileges/users/delete}" method="post" class="inl-1169661891">
+                        <input type="hidden" name="selectedGroupId" th:value="${selectedGroupId}" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn-inline secondary btn-delete"
+                                type="submit"
+                                th:text="#{delete}">Delete</button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div th:if="${tab == 'api-manager'}">
+
+            <div class="table-container">
+                <div class="table-title" th:text="#{api.management}">API Management</div>
+            <table class="table-shell" role="table" th:attr="aria-label=#{api.management}">
+                <thead role="rowgroup">
+                <tr role="row">
+                    <th scope="col" th:attr="aria-label=#{select.api}" class="inl-82eb62afb6"></th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},apisSort='id',apisDirection=${apisSort == 'id' and apisDirection == 'asc' ? 'desc' : 'asc'},apisPage=0,size=${pageSize},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection})}">
+                            ID
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${apisSort == 'id' ? (apisDirection == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},apisSort='apiUrl',apisDirection=${apisSort == 'apiUrl' and apisDirection == 'asc' ? 'desc' : 'asc'},apisPage=0,size=${pageSize},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection})}">
+                            <span th:text="#{api.url}">API URL</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${apisSort == 'apiUrl' ? (apisDirection == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th scope="col" class="priv-col-heading" th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''" th:text="#{actions}">Actions</th>
+                </tr>
+                </thead>
+                <tbody role="rowgroup">
+                <tr th:each="api : ${apiManagement}" role="row">
+                    <td><input type="checkbox" name="apiIds" th:value="${api.id}" form="deleteApisForm" th:attr="aria-label=#{select.api.aria(${api.apiUrl})}" /></td>
+                    <td th:text="${api.id}">1</td>
+                    <td th:text="${api.apiUrl}">/api/url</td>
+                    <td>
+                        <a class="btn-inline"
+                           th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize},modal='edit-api',modalApiId=${api.id})}"
+                           th:text="#{update}">Update</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(apiManagement)}">
+                    <td colspan="4" th:text="#{no.apis.found}">No APIs found.</td>
+                </tr>
+                </tbody>
+            </table>
+                <!-- Pagination for API Management table -->
+                    <div th:if="${apiTotalPages > 1}" class="pagination-row">
+                        <nav class="pagination-nav">
+                            <a th:if="${apiPage > 0}"
+                               th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},apisPage=${apiPage-1},size=${pageSize},apisSort=${apisSort},apisDirection=${apisDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection})}"
+                               class="arrow" th:text="'« ' + #{prev}">&laquo; Prev</a>
+                            <a th:each="i : ${#numbers.sequence(0, apiTotalPages-1)}"
+                               th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},apisPage=${i},size=${pageSize},apisSort=${apisSort},apisDirection=${apisDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection})}"
+                               th:text="${i+1}"
+                               th:classappend="${apiPage == i} ? 'active'">
+                            </a>
+                            <a th:if="${apiPage < apiTotalPages-1}"
+                               th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},apisPage=${apiPage+1},size=${pageSize},apisSort=${apisSort},apisDirection=${apisDirection},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection})}"
+                               class="arrow" th:text="#{next} + ' »'">Next &raquo;</a>
+                        </nav>
+                    </div>
+
+            <div class="action-row admin-table-actions-center inl-d2c171b18b">
+                    <div class="inl-86a52091a9">
+                        <a class="btn-inline"
+                           th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize},modal='edit-group-apis',editApisGroupId=${selectedGroupId})}"
+                           th:text="#{edit.apis}">Add</a>
+                        <form id="deleteApisForm" th:action="@{/admin/privileges/api-management/delete}" method="post" class="inl-1169661891">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button class="btn-inline secondary btn-delete"
+                                    type="submit"
+                                    th:text="#{delete}">Delete</button>
+                        </form>
+                    </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'add-group'}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{add.group}">Add Group</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <form th:action="@{/admin/privileges/group-management/add}" method="post" class="compact-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="text" name="groupName" th:placeholder="#{enter.group.name}" placeholder="Enter group name" />
+            <div th:if="${modalGroupError}" class="message error" th:text="${modalGroupError}"></div>
+            <div class="modal-actions">
+                <button class="btn-inline" type="submit" th:text="#{save}">Save</button>
+                <a class="btn-inline secondary" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{cancel}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'edit-group' and modalGroup != null}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{update.group}">Update Group</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <form th:action="@{/admin/privileges/group-management/update}" method="post" class="compact-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="hidden" name="groupId" th:value="${modalGroup.id}" />
+            <input type="text" name="groupName" th:value="${modalGroup.groupName}" required />
+            <div th:if="${modalGroupError}" class="message error" th:text="${modalGroupError}"></div>
+            <div class="modal-actions">
+                <button class="btn-inline" type="submit" th:text="#{save}">Save</button>
+                <a class="btn-inline secondary" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{cancel}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'edit-api' and modalApi != null}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{update.api}">Update API</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <form th:action="@{/admin/privileges/api-management/update}" method="post" class="compact-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="hidden" name="apiId" th:value="${modalApi.id}" />
+            <input type="text" name="apiUrl" th:value="${modalApi.apiUrl}" />
+            <div class="modal-actions">
+                <button class="btn-inline" type="submit" th:text="#{save}">Save</button>
+                <a class="btn-inline secondary" th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{cancel}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'edit-user-groups'}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{edit.groups}">Edit Groups</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <form th:action="@{/admin/privileges}" method="get" class="compact-form">
+            <input type="hidden" name="tab" value="user-group" />
+            <input type="hidden" name="modal" value="edit-user-groups" />
+            <input type="hidden" name="selectedGroupId" th:value="${selectedGroupId}" />
+            <input type="hidden" name="size" th:value="${pageSize}" />
+            <input type="hidden" name="groupsPage" th:value="${groupsPage}" />
+            <input type="hidden" name="usersPage" th:value="${usersPage}" />
+            <input type="hidden" name="apisPage" th:value="${apiPage}" />
+            <input type="hidden" name="groupsSort" th:value="${groupsSort}" />
+            <input type="hidden" name="groupsDirection" th:value="${groupsDirection}" />
+            <input type="hidden" name="usersSort" th:value="${usersSort}" />
+            <input type="hidden" name="usersDirection" th:value="${usersDirection}" />
+            <input type="hidden" name="apisSort" th:value="${apisSort}" />
+            <input type="hidden" name="apisDirection" th:value="${apisDirection}" />
+            <input type="hidden" name="userComboPage" th:value="${userComboPage}" />
+            <input type="hidden" name="userComboSize" th:value="${userComboSize}" />
+
+            <label th:text="#{user}">User</label>
+            <select name="modalUserId" onchange="this.form.submit()">
+                <option value="" disabled th:selected="${modalUserId == null}" th:text="#{select.user.option}">-- Select User --</option>
+                <option th:each="u : ${allUsers}"
+                        th:value="${u.id}"
+                        th:selected="${modalUserId != null and modalUserId == u.id}"
+                        th:text="${u.firstName + ' ' + (u.lastName != null ? u.lastName : '') + (u.userName != null ? ' (' + u.userName + ')' : '')}">
+                    User
+                </option>
+            </select>
+            <div class="pagination-row" th:if="${userComboTotalPages > 1}">
+                <nav class="pagination-nav">
+                    <a th:if="${userComboPage > 0}"
+                       th:href="@{/admin/privileges(tab='user-group',modal='edit-user-groups',userComboPage=${userComboPage-1},userComboSize=${userComboSize},selectedGroupId=${selectedGroupId},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                       class="arrow" th:text="'« ' + #{prev}">&laquo; Prev</a>
+                    <a th:each="i : ${#numbers.sequence(0, userComboTotalPages-1)}"
+                       th:href="@{/admin/privileges(tab='user-group',modal='edit-user-groups',userComboPage=${i},userComboSize=${userComboSize},selectedGroupId=${selectedGroupId},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                       th:text="${i+1}"
+                       th:classappend="${userComboPage == i} ? 'active'">
+                    </a>
+                    <a th:if="${userComboPage < userComboTotalPages-1}"
+                       th:href="@{/admin/privileges(tab='user-group',modal='edit-user-groups',userComboPage=${userComboPage+1},userComboSize=${userComboSize},selectedGroupId=${selectedGroupId},size=${pageSize},groupsPage=${groupsPage},usersPage=${usersPage},apisPage=${apiPage},groupsSort=${groupsSort},groupsDirection=${groupsDirection},usersSort=${usersSort},usersDirection=${usersDirection},apisSort=${apisSort},apisDirection=${apisDirection})}"
+                       class="arrow" th:text="#{next} + ' »'">Next &raquo;</a>
+                </nav>
+            </div>
+        </form>
+        <form th:action="@{/admin/privileges/users/groups/update}" method="post" class="stack-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <input type="hidden" th:if="${modalUserId != null}" name="userId" th:value="${modalUserId}" />
+            
+            <!-- User Selection -->
+            <div th:if="${userSelectionError}" class="message-error inl-5e0faad207" th:text="${userSelectionError}"></div>
+            
+            <!-- Groups Selection -->
+            <label th:text="#{groups}">Groups</label>
+            <div class="checkbox-group" id="groupsCheckboxContainer">
+                <div th:each="g : ${allGroups}" class="checkbox-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="groupIds" th:value="${g.id}" class="group-checkbox"
+                               th:checked="${(modalUserId != null and modalUser != null and modalUser.groups != null and #lists.contains(modalUser.groups.![id], g.id)) or (modalUserId != null and modalUser == null)}" />
+                        <span th:text="${g.groupName}">Group</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-inline" type="submit" th:text="#{save}">Save</button>
+                <a class="btn-inline secondary" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{cancel}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'edit-group-apis'}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{edit.apis}">Add</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <form th:action="@{/admin/privileges}" method="get" class="compact-form inl-761d3addb2" id="editGroupApisForm">
+            <input type="hidden" name="tab" value="api-manager" />
+            <input type="hidden" name="modal" value="edit-group-apis" />
+            <input type="hidden" name="selectedGroupId" th:value="${selectedGroupId}" />
+            <input type="hidden" name="size" th:value="${pageSize}" />
+            <input type="hidden" name="groupsPage" th:value="${groupsPage}" />
+            <input type="hidden" name="usersPage" th:value="${usersPage}" />
+            <input type="hidden" name="apisPage" th:value="${apiPage}" />
+            <input type="hidden" name="groupsSort" th:value="${groupsSort}" />
+            <input type="hidden" name="groupsDirection" th:value="${groupsDirection}" />
+            <input type="hidden" name="usersSort" th:value="${usersSort}" />
+            <input type="hidden" name="usersDirection" th:value="${usersDirection}" />
+            <input type="hidden" name="apisSort" th:value="${apisSort}" />
+            <input type="hidden" name="apisDirection" th:value="${apisDirection}" />
+            <label for="groupSelect"><b th:text="#{app.group.name}">App Group</b></label>
+            <select id="groupSelect" name="editApisGroupId" onchange="this.form.submit()">
+                <option th:each="g : ${allGroups}"
+                        th:value="${g.id}"
+                        th:text="${g.groupName}"
+                        th:selected="${editApisGroupId != null and editApisGroupId == g.id}"></option>
+            </select>
+        </form>
+
+        <form th:action="@{/admin/privileges/groups/apis/update}" method="post" class="stack-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" name="groupId" th:value="${editApisGroupId}" />
+                <div class="inl-e1836e5950">
+                    <label th:each="api : ${allApis}" class="inl-6d1df9f454">
+                        <input type="checkbox" name="apiIds" th:value="${api.id}"
+                               th:checked="${editApisSelection != null and editApisSelection.apiIds != null and editApisSelection.apiIds.contains(api.id)}" />
+                        <span th:text="${api.apiUrl}"></span>
+                    </label>
+                </div>
+                <div class="modal-actions inl-c1780db655">
+                    <button class="btn-inline" type="submit" th:text="#{save}">Save</button>
+                    <a class="btn-inline secondary" th:href="@{/admin/privileges(tab='api-manager',selectedGroupId=${selectedGroupId},size=${pageSize})}" th:text="#{cancel}">Cancel</a>
+                </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'add-user'}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{add}">Add</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <iframe class="modal-iframe" th:src="@{/admin/users/add(returnTo='privileges')}" th:attr="title=#{add.user.title}"></iframe>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${modal == 'edit-user' and modalUser != null}">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 th:text="#{update}">Update</h3>
+            <a class="modal-close" th:href="@{/admin/privileges(tab='user-group',selectedGroupId=${selectedGroupId},size=${pageSize})}">✕</a>
+        </div>
+        <iframe class="modal-iframe" th:src="@{'/admin/users/edit/' + ${modalUser.id} + '?returnTo=privileges'}" th:attr="title=#{edit.user.title}"></iframe>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

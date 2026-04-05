@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="${mode} == 'edit' ? #{edit.author} : #{add.author}">Author</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+<div class="edit-shell">
+    <th:block th:replace="~{fragments/admin-form-shell :: messages}"></th:block>
+    <th:block th:replace="~{fragments/admin-form-shell :: title(${mode} == 'edit' ? #{edit.author} : #{add.author})}"></th:block>
+    <form method="post" th:object="${authorDTO}" th:action="${mode} == 'edit' ? @{'/admin/authors/edit/' + ${authorDTO.id}} : @{/admin/authors/add}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" th:if="${authorDTO.id}" th:field="*{id}" />
+
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{first.name}">First Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{firstName}" />
+                <div th:if="${#fields.hasErrors('firstName')}" class="message-error inl-5e0faad207" th:errors="*{firstName}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{last.name}">Last Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{lastName}" />
+                <div th:if="${#fields.hasErrors('lastName')}" class="message-error inl-5e0faad207" th:errors="*{lastName}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{email}">E-Mail Address:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{email}" />
+                <div th:if="${#fields.hasErrors('email')}" class="message-error inl-5e0faad207" th:errors="*{email}"></div>
+            </div>
+        </div>
+        <th:block th:replace="~{fragments/admin-form-shell :: save-actions}"></th:block>
+    </form>
+</div>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

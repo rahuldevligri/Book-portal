@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{publisher.report.title}">Publisher Report</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body topmargin="0" leftmargin="0">
+
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="search-wrapper">
+    <div class="simple-search-block">
+        <h1 class="simple-search-title" th:text="#{publisher.report.title}">Publisher Report</h1>
+
+        <form th:action="@{/reports/publishers/pdf}" method="get" target="_blank" class="publisher-report-form">
+            <input type="hidden" name="lang" th:value="${#locale.language}">
+            <label for="publisherId" th:text="#{publisher.report.select}">Publisher</label>
+            <select id="publisherId" name="publisherId">
+                <option value="" th:text="#{publisher.report.all}">All Publishers</option>
+                <option th:each="publisher : ${publishers}"
+                        th:value="${publisher.id}"
+                        th:selected="${selectedPublisherId != null and selectedPublisherId == publisher.id}"
+                        th:text="${publisher.name}">
+                    Publisher Name
+                </option>
+            </select>
+            <button type="submit" class="search-bar-btn" th:text="#{publisher.report.generate}">Generate Report</button>
+        </form>
+
+        <p class="publisher-report-help" th:text="#{publisher.report.help}">
+            Leave publisher empty to print all publishers.
+        </p>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+
+</body>
+</html>

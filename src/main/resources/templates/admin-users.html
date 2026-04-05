@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{user.manager}">User Manager</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="table-container">
+    <div th:if="${success}" class="message success">[[${success}]]</div>
+    <div th:if="${info}" class="message info">[[${info}]]</div>
+    <div th:if="${error}" class="message error">[[${error}]]</div>
+    <div th:if="${noSelection}" class="message error" th:text="#{admin.action.delete.noselection}">Please select at least one record to delete.</div>
+    <div th:if="${users == null || #lists.isEmpty(users)}" class="message error" th:text="#{no.users.found}">No users found.</div>
+    <form method="post" th:action="@{/admin/users/delete}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="page" th:value="${pageNumber}" />
+        <input type="hidden" name="size" th:value="${pageSize}" />
+        <input type="hidden" name="sort" th:value="${sort}" />
+        <input type="hidden" name="direction" th:value="${direction}" />
+        <div class="table-title" th:text="#{user.list}">User List</div>
+        <table class="table-shell">
+            <thead>
+                <tr>
+                    <th class="inl-82eb62afb6"></th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='firstName',direction=${sort == 'firstName' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{first.name}">First Name</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'firstName' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='lastName',direction=${sort == 'lastName' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{last.name}">Last Name</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'lastName' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='email',direction=${sort == 'email' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{email}">E-mail</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'email' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='userName',direction=${sort == 'userName' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{username}">User Name</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'userName' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <!-- Password column removed -->
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='secretQuestionId',direction=${sort == 'secretQuestionId' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{secret.question}">Secret Question</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'secretQuestionId' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='secretAnswer',direction=${sort == 'secretAnswer' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{secret.answer}">Secret Answer</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'secretAnswer' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'rtl-col-heading':''">
+                        <a th:href="@{/admin/users(page=0,size=${pageSize},sort='userTypeId',direction=${sort == 'userTypeId' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{user.type}">User Type</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'userTypeId' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td>
+                        <input type="checkbox" name="userIds" th:value="${user.id}" 
+                            th:disabled="${currentUserId != null and user.id == currentUserId}" 
+                            th:title="${currentUserId != null and user.id == currentUserId} ? 'You cannot delete your own account.' : null" />
+                    </td>
+                    <td><a th:href="@{'/admin/users/edit/' + ${user.id}}" class="table-link" th:text="${user.firstName}">first</a></td>
+                    <td th:text="${user.lastName}">last</td>
+                    <td th:text="${user.email}">email</td>
+                    <td th:text="${user.userName}">username</td>
+                    <!-- Password cell removed -->
+                    <td th:text="${secretQuestionsMap[user.secretQuestionId]}">question</td>
+                    <td th:text="${user.secretAnswer}">answer</td>
+                    <td th:text="${userTypesMap != null && user.userTypeId != null && userTypesMap[user.userTypeId] != null ? userTypesMap[user.userTypeId] : #messages.msg('normal')}">normal</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="9" th:text="#{no.users.found}">No users found.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="action-row admin-table-actions-center">
+            <a class="btn-inline" th:href="@{/admin/users/add}" th:text="#{add}">Add</a>
+            <button class="btn-inline secondary btn-delete" type="submit" th:text="#{delete}">Delete</button>
+        </div>
+    </form>
+    <div class="admin-pagination" th:if="${totalPages != null && totalPages > 1}">
+        <a th:if="${pageNumber > 0}" th:href="@{/admin/users(page=${pageNumber-1},size=${pageSize},sort=${sort},direction=${direction})}" th:text="#{previous}">Previous</a>
+        <span th:text="#{page}">Page</span> <span th:text="${pageNumber + 1}">1</span> <span th:text="#{of}">of</span> <span th:text="${totalPages}">1</span>
+        <a th:if="${pageNumber + 1 < totalPages}" th:href="@{/admin/users(page=${pageNumber+1},size=${pageSize},sort=${sort},direction=${direction})}" th:text="#{next}">Next</a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

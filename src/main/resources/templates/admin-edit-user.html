@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{admin.edit.user}">Edit User</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+<div class="edit-shell">
+    <div th:if="${success}" class="message success">[[${success}]]</div>
+    <div th:if="${error}" class="message error">[[${error}]]</div>
+    <div class="edit-title" th:text="#{admin.edit.user}">Edit User :</div>
+    <form method="post" th:action="@{'/admin/users/edit/' + ${user.id}}" th:object="${user}">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="returnTo" th:value="${returnTo}" />
+
+        <div th:if="${#fields.hasGlobalErrors()}" class="message-error inl-875cdb0f4a">
+            <ul class="inl-592d196c45">
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{first.name}">First Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{firstName}" />
+                <div th:if="${#fields.hasErrors('firstName')}" class="message-error inl-5e0faad207" th:errors="*{firstName}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{last.name}">Last Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{lastName}" />
+                <div th:if="${#fields.hasErrors('lastName')}" class="message-error inl-5e0faad207" th:errors="*{lastName}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{email}">E-Mail Address:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{email}" />
+                <div th:if="${#fields.hasErrors('email')}" class="message-error inl-5e0faad207" th:errors="*{email}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{username}">User Name:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{userName}" />
+                <div th:if="${#fields.hasErrors('userName')}" class="message-error inl-5e0faad207" th:errors="*{userName}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{password}">Password:</div>
+            <div class="edit-input">
+                <input type="password" th:field="*{password}" th:placeholder="#{admin.edit.keep.current}" placeholder="Leave blank to keep current" />
+                <div th:if="${#fields.hasErrors('password')}" class="message-error inl-5e0faad207" th:errors="*{password}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{secret.question}">Secret Question:</div>
+            <div class="edit-input">
+                <select th:field="*{secretQuestionId}">
+                    <option value="" th:text="#{select.question}">-- Select a Question --</option>
+                        <option th:each="q : ${secretQuestions}"
+                            th:value="${q.id}"
+                            th:selected="${q.id == user.secretQuestionId}"
+                            th:text="#{${q.question}}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('secretQuestionId')}" class="message-error inl-5e0faad207" th:errors="*{secretQuestionId}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{secret.answer}">Secret Answer:</div>
+            <div class="edit-input">
+                <input type="text" th:field="*{secretAnswer}" th:placeholder="#{admin.edit.keep.current}" placeholder="Leave blank to keep current" />
+                <div th:if="${#fields.hasErrors('secretAnswer')}" class="message-error inl-5e0faad207" th:errors="*{secretAnswer}"></div>
+            </div>
+        </div>
+        <div class="edit-row">
+            <div class="edit-label" th:text="#{user.type}">User Type:</div>
+            <div class="edit-input">
+                <select th:field="*{userTypeId}">
+                        <option th:each="type : ${userTypes}"
+                            th:value="${type.id}"
+                            th:selected="${user.userTypeId == type.id}"
+                            th:text="${type.type}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('userTypeId')}" class="message-error inl-5e0faad207" th:errors="*{userTypeId}"></div>
+            </div>
+        </div>
+        <div class="edit-actions">
+                <button type="submit" th:text="#{save}">Save</button>
+                <a class="btn-inline secondary"
+                    th:href="${returnTo} == 'privileges' ? '/admin/privileges' : '/admin/users'"
+                    th:text="#{cancel}">Cancel</a>
+        </div>
+    </form>
+</div>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

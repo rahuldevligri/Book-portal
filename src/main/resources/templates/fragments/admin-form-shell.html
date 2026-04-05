@@ -1,0 +1,24 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <th:block th:fragment="messages">
+        <div th:if="${success}" class="message success">[[${success}]]</div>
+        <div th:if="${error}" class="message error">[[${error}]]</div>
+    </th:block>
+
+    <th:block th:fragment="title(titleText)">
+        <div class="edit-title" th:text="${titleText}">Title</div>
+    </th:block>
+
+    <th:block th:fragment="save-actions">
+        <div class="edit-actions">
+            <button type="submit" th:text="#{save}">Save</button>
+            <a class="btn-inline secondary"
+               th:if="${cancelPath != null}"
+               th:href="@{${cancelPath}}"
+               th:text="#{cancel}">Cancel</a>
+            <a class="btn-inline secondary"
+               th:if="${cancelPath == null}"
+               onclick="history.back()"
+               th:text="#{cancel}">Cancel</a>
+        </div>
+    </th:block>
+</th:block>

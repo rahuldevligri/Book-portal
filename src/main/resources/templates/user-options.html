@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{user.options}">User Options</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+</head>
+
+<body topmargin="0" leftmargin="0">
+
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+<br>
+
+<!-- MAIN CONTENT -->
+<table width="100%" bgcolor="#0098CA" height="95%" border="0"
+       class="inl-aa7ab9fbfd">
+    <tr>
+
+        <!-- LEFT PANEL -->
+        <td valign="top" width="25%" class="user-options-left">
+            <font><b th:text="#{user.options}">User Options:</b></font>
+            <br><br>
+
+            <center>
+                &raquo; <a th:href="@{/change-password}" th:text="#{change.password}">Change Password</a>
+            </center>
+
+            <br>
+
+            <center>
+                &raquo; <a th:href="@{/edit-profile}" th:text="#{edit.profile}">Edit Profile</a>
+            </center>
+        </td>
+
+        <!-- RIGHT PANEL -->
+        <td width="75%">
+            <table cellpadding="3" cellspacing="0" width="100%"
+                   bgcolor="#BDDFFF" height="95%">
+                <tr>
+                    <td align="center" valign="top">
+                        <br>
+                        <span th:text="#{user.options.desc}">In this page you have some options for handling your account.</span><br>
+                        <span th:text="#{user.options.select}">Please select an option from the left panel.</span><br>&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </td>
+
+    </tr>
+</table>
+
+<br>
+
+<!-- FOOTER -->
+<div class="footer">
+</div>
+
+<div class="footer-links">
+</div>
+
+</body>
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</html>
+

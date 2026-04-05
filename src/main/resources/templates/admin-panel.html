@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{admin.panel}">Admin Panel</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="sections">
+    <a th:href="@{/admin/users}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{user.manager}">User Manager</span></div>
+            <div class="section-body" th:text="#{manage.users}">Manage users</div>
+        </div>
+    </a>
+    <a th:href="@{/admin/authors}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{authors.manager}">Authors Manager</span></div>
+            <div class="section-body" th:text="#{manage.authors}">Manage authors</div>
+        </div>
+    </a>
+    <a th:href="@{/admin/publishers}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{publisher.manager}">Publisher Manager</span></div>
+            <div class="section-body" th:text="#{manage.publishers}">Manage publishers</div>
+        </div>
+    </a>
+    <a th:href="@{/admin/user-types}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{usertypes.manager}">User Types Manager</span></div>
+            <div class="section-body" th:text="#{manage.user.roles}">Manage user roles</div>
+        </div>
+    </a>
+    <a th:href="@{/admin/distributors}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{distributors.manager}">Distributors Manager</span></div>
+            <div class="section-body" th:text="#{manage.distributors}">Manage distributors</div>
+        </div>
+    </a>
+    <a th:href="@{/admin/privileges}" class="admin-panel-row-link">
+        <div class="section-row">
+            <div class="section-title"><span class="icon-dot"></span> <span th:text="#{user.privileges}">User Privileges</span></div>
+            <div class="section-body" th:text="#{manage.user.privileges}">Manage user and group privileges</div>
+        </div>
+    </a>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
+

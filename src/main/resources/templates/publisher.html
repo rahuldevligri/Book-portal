@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{publisher.search}">Publisher Search</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body topmargin="0" leftmargin="0">
+
+<!-- HEADER -->
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+
+<div class="search-wrapper">
+    <div class="classic-summary-wrap" th:if="${groupedSearch}">
+        <h1 class="classic-summary-title">
+            <span th:text="#{publisher.search}">Publisher Search</span>
+            <span th:text="${query != null && !#strings.isEmpty(query) ? ' ' + #messages.msg('for') + ' ' + query : ''}"></span>
+        </h1>
+        <hr class="classic-summary-divider">
+
+        <div th:if="${publisherGroups == null || #lists.isEmpty(publisherGroups)}" class="classic-summary-empty" th:text="#{no.publishers.found}">
+            No publishers found.
+        </div>
+
+        <div th:if="${publisherGroups != null && !#lists.isEmpty(publisherGroups)}" th:each="group : ${publisherGroups}">
+            <h2 class="classic-summary-title" th:text="${group.publisher.name}">Publisher Name</h2>
+
+            <div th:if="${group.categories == null || #lists.isEmpty(group.categories)}" class="classic-summary-empty" th:text="#{no.books.found.for.publisher}">
+                No books found for this publisher.
+            </div>
+
+            <div th:if="${group.categories != null && !#lists.isEmpty(group.categories)}">
+                <div class="classic-summary-row" th:each="cat : ${group.categories}">
+                    <div class="classic-summary-category" th:text="${cat.categoryName}">Category Name</div>
+                    <div class="classic-summary-meta">
+                        <a class="classic-summary-books"
+                           th:href="@{/books(publisherId=${group.publisher.id},categoryId=${cat.categoryId},returnTo=${'/publishers?q=' + query + '&matchType=' + matchType})}"
+                           th:text="${cat.bookCount} + ' ' + #{books.suffix}">
+                            0 book(s)
+                        </a>
+                        <a class="classic-summary-view"
+                           th:href="@{/books(publisherId=${group.publisher.id},categoryId=${cat.categoryId},returnTo=${'/publishers?q=' + query + '&matchType=' + matchType})}"
+                           th:text="#{view}">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="simple-search-block" th:if="${!groupedSearch}">
+        <h1 class="simple-search-title" th:text="#{publisher.search}">Publisher Search</h1>
+
+        <div class="simple-search-body" th:if="${publishers == null || #lists.isEmpty(publishers)}">
+            <span th:text="#{no.publishers.found}">No publishers found.</span>
+        </div>
+
+        <div class="simple-search-body" th:if="${publishers != null && !#lists.isEmpty(publishers)}">
+            <a th:each="publisher : ${publishers}"
+               th:href="@{/publishers/{id}(id=${publisher.id})}"
+               class="simple-search-link"
+               th:text="${publisher.name}">
+                Publisher Name
+            </a>
+        </div>
+    </div>
+</div>
+<br>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+
+</body>
+</html>
+

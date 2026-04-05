@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{advanced.search.title}">Advanced Search | Book Portal</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+</head>
+<body topmargin="0" leftmargin="0">
+
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div align="center">
+    <table border="0" cellpadding="0" cellspacing="10" width="90%" align="center">
+        <tr>
+            <td width="100%" valign="top" align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tr>
+                        <td width="100%" valign="top" bgcolor="#FFFFFF">
+                            <b><font size="3" th:text="#{advanced.search.form}">Search Form</font></b>
+                            <hr width="90%" noshade size="1" color="#C6C3C6" align="left">
+
+                            <form method="get" th:action="@{/search/author}">
+                                <table class="advanced-search-form" width="70%" cellspacing="0" bordercolor="#086194" border="1" cellpadding="3" align="center">
+                                    <tr><td bgcolor="#EFEFEF"><b th:text="#{advanced.search.author}">Author Search</b></td></tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                                                <tr>
+                                                    <td width="25%" th:text="#{advanced.search.type}">Search Type:</td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="exact"> <span th:text="#{advanced.search.exact}">Exact</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="start"> <span th:text="#{advanced.search.beginning}">Beginning With</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="contains" checked> <span th:text="#{advanced.search.containing}">Containing</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="25%" colspan="4">
+                                                        &nbsp;<span th:text="#{author}">Author</span>: <input type="text" name="q" size="20"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <input type="submit" th:value="#{advanced.search.button}" value="Search">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <br>
+
+                            <form method="get" th:action="@{/search/publisher}">
+                                <table class="advanced-search-form" width="70%" cellspacing="0" bordercolor="#086194" border="1" cellpadding="3" align="center">
+                                    <tr><td bgcolor="#EFEFEF"><b th:text="#{advanced.search.publisher}">Publisher Search</b></td></tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                                                <tr>
+                                                    <td width="25%" th:text="#{advanced.search.type}">Search Type:</td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="exact"> <span th:text="#{advanced.search.exact}">Exact</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="start"> <span th:text="#{advanced.search.beginning}">Beginning With</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="contains" checked> <span th:text="#{advanced.search.containing}">Containing</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="25%" colspan="4">
+                                                        &nbsp;<span th:text="#{publisher}">Publisher</span>: <input type="text" name="q" size="20"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <input type="submit" th:value="#{advanced.search.button}" value="Search">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <br>
+
+                            <form method="get" th:action="@{/search/title}">
+                                <table class="advanced-search-form" width="70%" cellspacing="0" bordercolor="#086194" border="1" cellpadding="3" align="center">
+                                    <tr><td bgcolor="#EFEFEF"><b th:text="#{advanced.search.title.section}">Title Search</b></td></tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0" cellpadding="5" cellspacing="0" width="100%">
+                                                <tr>
+                                                    <td width="25%" th:text="#{advanced.search.type}">Search Type:</td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="exact"> <span th:text="#{advanced.search.exact}">Exact</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="start"> <span th:text="#{advanced.search.beginning}">Beginning With</span></td>
+                                                    <td width="25%"><input name="matchType" type="radio" value="contains" checked> <span th:text="#{advanced.search.containing}">Containing</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="25%" colspan="4">
+                                                        &nbsp;<span th:text="#{title}">Title</span>: <input type="text" name="q" size="20"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <input type="submit" th:value="#{advanced.search.button}" value="Search">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+
+</body>
+</html>

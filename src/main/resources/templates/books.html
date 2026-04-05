@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <title th:text="#{book.search.results}">Book Search Results</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+</head>
+<body topmargin="0" leftmargin="0">
+
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<form th:action="@{/books}" method="get" class="inl-1169661891">
+<input type="hidden" name="authorId" th:if="${authorId != null}" th:value="${authorId}" />
+<input type="hidden" name="publisherId" th:if="${publisherId != null}" th:value="${publisherId}" />
+<input type="hidden" name="categoryId" th:if="${categoryId != null}" th:value="${categoryId}" />
+<input type="hidden" name="page" th:value="${pageNumber}" />
+<input type="hidden" name="size" th:value="${pageSize}" />
+<input type="hidden" name="sort" th:value="${sort}" />
+<input type="hidden" name="direction" th:value="${direction}" />
+<input type="hidden" name="q" th:if="${query != null && !#strings.isEmpty(query)}" th:value="${query}" />
+<input type="hidden" name="matchType" th:if="${matchType != null}" th:value="${matchType}" />
+<input type="hidden" name="returnTo" th:if="${returnTo != null}" th:value="${returnTo}" />
+<div class="inl-918ca8129a">
+    <a th:if="${backUrl != null}" th:href="${backUrl}" th:text="#{back}" class="inl-71bb6fae11">Back</a>
+    <button th:if="${backUrl == null}" type="button" th:text="#{back}" onclick="window.history.back();" class="inl-71bb6fae11">Back</button>
+    <button id="compareBtn" type="submit" name="compareRequest" value="true" th:text="#{compare}" class="inl-71bb6fae11">Compare</button>
+    <span id="compareErrorText"
+          th:if="${compareError}"
+          th:text="${#messages.msgOrNull(compareError) != null ? #messages.msg(compareError) : compareError}"
+            class="inl-185e5db5ba">Please select at least two books to compare.</span>
+</div>
+<div class="inl-f9aa6ccef7">
+    <table class="inl-c59c9048b3">
+        <tr>
+            <td colspan="6" th:text="#{search.results}" class="inl-7515e4ec87">SEARCH RESULTS</td>
+        </tr>
+        <tr class="inl-7e181bc234">
+            <th class="inl-f3c416738b"></th>
+            <th class="inl-9112c53876">
+                <span class="inl-db78cbe24a">#</span><span th:text="#{book.title}">Book title</span>
+            </th>
+            <th class="inl-9112c53876">
+                <span class="inl-db78cbe24a">$</span><span th:text="#{publisher}">Publisher</span>
+            </th>
+            <th class="inl-9112c53876">
+                <span class="inl-db78cbe24a">$</span><span th:text="#{category}">Category</span>
+            </th>
+            <th class="inl-9112c53876">
+                <span class="inl-db78cbe24a">$</span><span th:text="#{author}">Author</span>
+            </th>
+            <th class="inl-9112c53876">
+                <span class="inl-db78cbe24a">$</span><span th:text="#{image}">Image</span>
+            </th>
+        </tr>
+        <tr th:if="${bookRows == null || #lists.isEmpty(bookRows)}">
+            <td colspan="6" th:text="#{no.books.found}" class="inl-c0ebd3f8da">No books found</td>
+        </tr>
+        <tr th:each="book : ${bookRows}" class="inl-53f9926863">
+            <td class="inl-4ac2c40b73">
+                <input type="checkbox" name="bookIds" th:value="${book.id}" th:checked="${selectedBookIds != null and #lists.contains(selectedBookIds, book.id)}" class="inl-d3c66089b4">
+            </td>
+            <td class="inl-c0780db16b">
+                <a th:href="@{/books(authorId=${authorId},publisherId=${publisherId},categoryId=${categoryId},page=${pageNumber},size=${pageSize},sort=${sort},direction=${direction},returnTo=${returnTo},featureBookId=${book.id})}"
+                   th:text="${book.title}">Book Title</a>
+            </td>
+            <td th:text="${book.publisherName ?: 'N/A'}" class="inl-c0780db16b">Publisher</td>
+            <td th:text="${book.categoryName ?: 'N/A'}" class="inl-c0780db16b">Category</td>
+            <td th:text="${book.authorName ?: 'N/A'}" class="inl-c0780db16b">Author</td>
+            <td th:with="thumbPath=${!#strings.isEmpty(book.thumbnailUrl) ? book.thumbnailUrl : '/thumb/genericBook.jpg'}" class="inl-4ac2c40b73">
+                <a th:href="@{/books(authorId=${authorId},publisherId=${publisherId},categoryId=${categoryId},page=${pageNumber},size=${pageSize},sort=${sort},direction=${direction},returnTo=${returnTo},imageBookId=${book.id})}">
+                    <img th:src="@{${thumbPath}}"
+                         onerror="this.onerror=null;this.src='/thumb/genericBook.jpg';"
+                         alt="Book thumbnail"
+                         loading="lazy"
+                         decoding="async"
+                         class="inl-b4994a9b4c book-thumb-small">
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
+</form>
+
+<div class="modal-backdrop" th:if="${showCompareModal}">
+    <div class="modal-card compare-modal-card compare-selection-modal">
+        <div class="modal-head">
+            <h3 th:text="#{compare}">Compare</h3>
+            <a class="modal-close"
+               th:href="@{/books(authorId=${authorId},publisherId=${publisherId},categoryId=${categoryId},page=${pageNumber},size=${pageSize},sort=${sort},direction=${direction},returnTo=${returnTo})}">✕</a>
+        </div>
+        <div th:replace="~{fragments/compare-table :: compareTable(books=${compareBooks},featureRows=${compareFeatureRows})}"></div>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${showFeatureModal}">
+    <div class="modal-card compare-modal-card">
+        <div class="modal-head">
+            <h3>
+                <span th:text="#{book.features}">Book Features</span>
+                <span th:text="${featureBook != null ? ' - ' + featureBook.title : ''}"></span>
+            </h3>
+            <a class="modal-close"
+               th:href="@{/books(authorId=${authorId},publisherId=${publisherId},categoryId=${categoryId},page=${pageNumber},size=${pageSize},sort=${sort},direction=${direction},returnTo=${returnTo})}">✕</a>
+        </div>
+        <div th:replace="~{fragments/compare-table :: compareTable(books=${featureModalBooks},featureRows=${featureRows})}"></div>
+    </div>
+</div>
+
+<div class="modal-backdrop" th:if="${showImageModal}">
+    <div class="modal-card image-modal-card">
+        <div class="modal-head">
+            <h3 th:text="${imageBook != null ? imageBook.title : #messages.msg('image')}">Image</h3>
+            <a class="modal-close"
+               th:href="@{/books(authorId=${authorId},publisherId=${publisherId},categoryId=${categoryId},page=${pageNumber},size=${pageSize},sort=${sort},direction=${direction},returnTo=${returnTo})}">✕</a>
+        </div>
+        <div class="image-preview-wrap"
+             th:with="fullPath=${imageBook != null && !#strings.isEmpty(imageBook.fullImageUrl) ? imageBook.fullImageUrl : (imageBook != null && !#strings.isEmpty(imageBook.thumbnailUrl) ? imageBook.thumbnailUrl : '/thumb/genericBook.jpg')}">
+            <img th:src="@{${fullPath}}"
+                 onerror="this.onerror=null;this.src='/thumb/genericBook.jpg';"
+                 alt="Book image preview"
+                 class="image-preview-large">
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>

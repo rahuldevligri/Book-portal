@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=${#locale.language},dir=${#locale.language}=='ar'?'rtl':'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{apis.manager}">API Manager</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/common-header :: common-header}"></div>
+
+<div class="table-container">
+        <div th:if="${noSelection}" class="message error" th:text="#{admin.action.delete.noselection}">Please select at least one record to delete.</div>
+        <div th:if="${apis == null || apis.totalElements == 0}" class="message error" th:text="#{no.apis.found}">No APIs found.</div>
+    <form method="post" th:action="@{/admin/apis/delete}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="table-title" th:text="#{apis.list}">API List</div>
+        <table class="table-shell">
+            <thead>
+                <tr>
+                    <th class="inl-82eb62afb6"></th>
+                    <th th:classappend="${#locale.language}=='ar'?'text-right':''">
+                        <a th:href="@{/admin/apis(page=0,size=${pageSize},sort='id',direction=${sort == 'id' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{id}">ID</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'id' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:classappend="${#locale.language}=='ar'?'text-right':''">
+                        <a th:href="@{/admin/apis(page=0,size=${pageSize},sort='apiUrl',direction=${sort == 'apiUrl' and direction == 'asc' ? 'desc' : 'asc'})}">
+                            <span th:text="#{api.url}">API URL</span>
+                            <span class="sort-icon" aria-hidden="true"
+                                  th:text="${sort == 'apiUrl' ? (direction == 'asc' ? '▲' : '▼') : '↕'}">↕</span>
+                        </a>
+                    </th>
+                    <th th:text="#{actions}" th:classappend="${#locale.language}=='ar'?'text-right':''">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="api : ${apis.content}">
+                    <td><input type="checkbox" name="apiIds" th:value="${api.id}" /></td>
+                    <td th:text="${api.id}">ID</td>
+                    <td th:text="${api.apiUrl}">API URL</td>
+                    <td>
+                        <a th:href="@{'/admin/apis/edit/' + ${api.id}}" class="table-link">Edit</a>
+                    </td>
+                </tr>
+                <tr th:if="${apis.totalElements == 0}">
+                    <td colspan="4" th:text="#{no.apis.found}">No APIs found.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="action-row admin-table-actions-center">
+            <a class="btn-inline" th:href="@{/admin/apis/add}" th:text="#{add}">Add</a>
+            <button class="btn-inline secondary btn-delete" type="submit" th:text="#{delete}">Delete</button>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-row" th:if="${apis.totalPages > 1}">
+            <a th:if="${!apis.first}" th:href="@{'/admin/apis'(page=${apis.number - 1},size=${apis.size},sort=${sort},direction=${direction})}" class="pagination-link" th:text="#{prev}">&laquo; Prev</a>
+            <span th:each="i : ${#numbers.sequence(0, apis.totalPages - 1)}">
+                <a th:if="${i != apis.number}" th:href="@{'/admin/apis'(page=${i},size=${apis.size},sort=${sort},direction=${direction})}" th:text="${i + 1}" class="pagination-link"></a>
+                <span th:if="${i == apis.number}" th:text="${i + 1}" class="pagination-current"></span>
+            </span>
+            <a th:if="${!apis.last}" th:href="@{'/admin/apis'(page=${apis.number + 1},size=${apis.size},sort=${sort},direction=${direction})}" class="pagination-link" th:text="#{next}">Next &raquo;</a>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{fragments/common-footer :: common-footer}"></div>
+</body>
+</html>
